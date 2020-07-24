@@ -47,12 +47,11 @@ mongoose
 
 
     //Index page (static HTML)
-  // app.route('/')
-  // .get(function (req, res) {
-  //   res.sendFile(process.cwd() + '/public/index.html');
-  // });
+  app.get('/',function (req, res) {
+    res.sendFile(process.cwd() + '/public/index.html');
+  });
 
-  app.get('/project', function (req, res) {
+  app.get('/project',  passport.authenticate('jwt', {session: false}) , function (req, res) {
     res.render('project', { title: 'Hey', message: 'Hello there!' })
   })
 

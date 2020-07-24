@@ -20,8 +20,7 @@ router.post("/login", async ( req, res ) =>{
                         if(isMatch) { 
                            
                             const payload = { id: user.id, name: user.first_name };
-                        //    res.json({ success: true});
-                            jwt.sign( payload, keys.secretOrKey , { expiresIn: 7200 },
+                               jwt.sign( payload, keys.secretOrKey , { expiresIn: 7200 },
                                  ( err , token ) => {
                                     res.json({ success: true, token: 'Bearer ' + token , project: '/project'})
                                     //res.json({ success: true})
