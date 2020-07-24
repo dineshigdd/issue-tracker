@@ -4,7 +4,6 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const keys = require('../../config/keys');
 const passport = require('passport');
- 
 const User = require('../../models/User');
 
 
@@ -20,13 +19,18 @@ router.post("/login", async ( req, res ) =>{
                     .then( isMatch => {
                         if(isMatch) { 
                            
-                        //     const payload = { id: user.id, name: user.first_name };
-                           res.json({ success: true});
-                        //     jwt.sign( payload, keys.secretOrKey , { expiresIn: 7200 },
-                        //          ( err , token ) => {
-                        //              res.json({ success: true, token: 'Bearer ' + token });
-                        //     })
-                        
+                            const payload = { id: user.id, name: user.first_name };
+                        //    res.json({ success: true});
+                            jwt.sign( payload, keys.secretOrKey , { expiresIn: 7200 },
+                                 ( err , token ) => {
+                                    res.json({ success: true, token: 'Bearer ' + token , project: '/project'})
+                                    //res.json({ success: true})
+                                    // res.send({ project: '/project' })
+                                    
+                                    
+                                   
+                            })
+                            
                         }else{
                             return res.status(400).json("Incorrect password");
                         }
@@ -72,6 +76,9 @@ router.get('/current', passport.authenticate('jwt', {session: false}), (req, res
       });
   })
 
+  router.get("/project", (req, res) => {
+    res.render("about", { title: "Hey", message: "Hello there!" });
+  });
 
 
 
