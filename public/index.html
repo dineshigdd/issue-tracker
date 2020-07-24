@@ -1,0 +1,51 @@
+
+<!doctype html>
+<html>
+<head>
+    <title>Issue tracker login</title>
+
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="/styles/styles.css">
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+
+<body>
+<div>
+    <form>      
+        
+            <label>username</label><input id="email" type="email" name="username"/>
+            <label>password</label><input id="password" type="password" name="password"/>
+            <button id="submit">submit</button>
+       
+    </form>
+    <script>
+        const login = (userData) =>{           
+                 return axios.post('/api/users/login', userData)
+                    .then( response => {
+                        const addedUser = response.data;
+                        console.log(`POST: user is added`, addedUser);  
+                        document.location = addedUser.project;
+                        // appendToDOM([addedUser]);
+                        
+                    }).catch(error => console.error(error))
+            
+        }
+
+
+        const form = document.querySelector('form');
+
+            const formEvent = form.addEventListener('submit', event => {
+            event.preventDefault();
+
+            const email = document.querySelector('#email').value;
+            const password = document.querySelector('#password').value;
+
+            const user = { email, password };
+            login(user);
+        })
+    </script>
+</div>
+</body>
+</html>
