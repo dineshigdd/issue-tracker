@@ -51,7 +51,7 @@ mongoose
     res.sendFile(process.cwd() + '/public/index.html');
   });
 
-  app.get('/project',  passport.authenticate('jwt', {session: false}) , function (req, res) {
+  app.get('/project', function (req, res) {
     res.render('project', { title: 'Hey', message: 'Hello there!' })
   })
 
