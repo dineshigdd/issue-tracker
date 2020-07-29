@@ -1,0 +1,18 @@
+<!doctype html>
+<html>
+<head>
+    <title>Test get axios request</title>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<body>
+    <h1>Welcome to issue tracker</h1>
+    <button onclick=gotoSignIn()>sign in</button>
+    <script>
+        const gotoSignIn = () =>{
+            axios.get('/sign-in').then( 
+                res => document.location = res.request.responseURL
+            )
+        }
+    </script>
+</body>
+</html>

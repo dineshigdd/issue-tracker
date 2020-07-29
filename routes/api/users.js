@@ -7,11 +7,12 @@ const passport = require('passport');
 const User = require('../../models/User');
 
 
+
 // user log in
 router.post("/login", async ( req, res ) =>{
-  
+    
      const { email , password } = req.body;
-
+      
     User.findOne({ email })
         .then( user => {
                 if( !user ) { return res.status(400).json("This user is not registered") }
@@ -19,12 +20,17 @@ router.post("/login", async ( req, res ) =>{
                     .then( isMatch => {
                         if(isMatch) { 
                            
-                            const payload = { id: user.id, name: user.first_name };
-                               jwt.sign( payload, keys.secretOrKey , { expiresIn: 7200 },
-                                 ( err , token ) => {
-                                    res.json({ success: true, token: 'Bearer ' + token , project: '/project'})
+                            const payload = { id: user.id, email: user.email };
+                               jwt.sign( payload, keys.secretOrKey , /*{ expiresIn: 7200 },*/
+                                 ( err , token ) => {                                  
+                                        req.session.user = user.id;//no need
+                                     
+                                   
+                                    res.send({ success: true, token: 'Bearer ' + token })
+                                    
                                     //res.json({ success: true})
                                     // res.send({ project: '/project' })
+                                    // res.redirect('api/projects/my-project')
                                     
                                     
                                    
@@ -75,10 +81,7 @@ router.get('/current', passport.authenticate('jwt', {session: false}), (req, res
       });
   })
 
-  router.get("/project", (req, res) => {
-    res.render("about", { title: "Hey", message: "Hello there!" });
-  });
-
+ 
 
 
 

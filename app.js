@@ -1,4 +1,5 @@
 const express = require('express');
+const session = require('express-session');
 const app = express();
 const db = require('./config/keys').mongoURI;   
 const mongoose = require('mongoose');
@@ -21,8 +22,7 @@ mongoose
     .catch( err => console.log(err));
 
 
-    app.set('view engine', 'pug')
-    app.set("views", path.join(__dirname, "./views"));
+    
 
 
     //Index page (static HTML)
@@ -40,24 +40,36 @@ mongoose
     app.use('/styles', express.static(process.cwd() + '/styles'));
     app.use(bodyParser.urlencoded({ extended: false }));
     app.use(bodyParser.json());
+    app.use(session({
+      'secret':'343ji43j4n3jn4jk3n',
+       resave: false,
+      saveUninitialized: false,
+
+    }))
    
     app.use("/api/users", users);
     app.use("/api/projects", projects);
     app.use("/api/issues", issues);
 
 
+    app.set('view engine', 'pug')
+    app.set("views", path.join(__dirname, "./views"));
+    
+    app.get('/',function (req, res) {
+      res.sendFile(process.cwd() + '/views/index.html');
+    });
     //Index page (static HTML)
-  app.get('/',function (req, res) {
-    res.sendFile(process.cwd() + '/public/index.html');
+  app.get('/sign-in',function (req, res) {
+    res.sendFile(process.cwd() + '/views/login.html');
   });
 
-  app.get('/project', function (req, res) {
-    res.render('project', { title: 'Hey', message: 'Hello there!' })
-  })
+  // app.get('/project', function (req, res) {
+  //   res.render('project', { title: 'Hey', message: 'Hello there!' })
+  // })
 
-//   app.route('/project')
+//   app.route('/')
 //     .get( (req, res) =>{
-//   res.render('project');
+//   res.render('index.html');
   
 // });
 
@@ -69,10 +81,12 @@ mongoose
      res.redirect('/');
   });
 
+ 
+
   if (process.env.NODE_ENV === 'production') {
-    app.use(express.static('/public'));
+    app.use(express.static('/views'));
     app.get('/', (req, res) => {
-      res.sendFile(path.resolve(__dirname, 'public','index.html'));
+      res.sendFile(path.resolve(__dirname, 'views','login.html'));
     })
   }
 
