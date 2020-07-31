@@ -21,10 +21,10 @@ router.post("/login", async ( req, res ) =>{
                         if(isMatch) { 
                            
                             const payload = { id: user.id, email: user.email };
-                               jwt.sign( payload, keys.secretOrKey , /*{ expiresIn: 7200 },*/
+                               jwt.sign( payload, keys.secretOrKey , { expiresIn: 7200 },
                                  ( err , token ) => {                                  
                                         req.session.user = user.id;//no need
-                                     
+                                        req.session.token = 'Bearer ' + token;
                                    
                                     res.send({ success: true, token: 'Bearer ' + token })
                                     
