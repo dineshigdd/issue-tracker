@@ -5,34 +5,22 @@ const passport = require('passport');
 const validateProjectInput = require('../../validation/project');
 const Project = require('../../models/Project');
 const User = require('../../models/User');
-const checkisAuthenticated = require('../../util/route_auth');
+const checkisAuthenticated = require('../../util/route-auth');
+const userProject = require('../../util/userProjects')
+const setUserProjects = userProject.setUserProjects;
+const getUserProjects = userProject.getUserProjects;
+
 
 // app.set('view engine', 'pug')
 // app.set("views", path.join(__dirname, "../../views"));
 
 router.get('/my-project', passport.authenticate('jwt', {session: false}), (req, res) => {
 
-    // res.json(req.body.email)
-    // User.findOne({ email: req.body.email }).then(
-    //     user => 
-        // res.json((req.params.email))
         console.log("this is in project "+ req.user.id)
         
-        Project.findOne({ assigned_to:  req.user.id }).then(
-            (project, err) => {
-                if( err ){
-                    console.log(err)
-                }
-                res.render("project", {  project:   project.project_name} )
-            }
-        ).catch(err => res.json( err ))
-
-       
-       
-    // )
-   
-
-   
+        setUserProjects(req.user.id);      
+        var project = getUserProjects();           
+        res.render("project", {  project: project} )
   });
 
 router.post("/project",passport.authenticate('jwt', {session: false }),

@@ -8,8 +8,11 @@ const users = require('./routes/api/users');
 const issues = require('./routes/api/issues');
 const projects = require('./routes/api/projects');
 const path = require("path");
+const { getUserProjects , setUserProjects } = require('./util/userProjects')
 
 const passport = require('passport');
+const { doesNotMatch } = require('assert');
+const { compareSync } = require('bcryptjs');
 app.use( passport.initialize());
 require('./config/passport')(passport);
 
@@ -44,7 +47,7 @@ mongoose
       'secret':'343ji43j4n3jn4jk3n',
        resave: false,
       saveUninitialized: false,
-
+      user:''
     }))
    
     app.use("/api/users", users);
@@ -59,10 +62,19 @@ mongoose
       res.sendFile(process.cwd() + '/views/index.html');
     });
     //Index page (static HTML)
-  app.get('/sign-in',function (req, res) {
-    res.sendFile(process.cwd() + '/views/login.html');
+  app.get('/sign-in',function (req, res) {   
+      if ( req.session.user == undefined)
+            res.sendFile(process.cwd() + '/views/login.html'); 
+      else  {
+        setUserProjects(req.session.user);      
+        var project = getUserProjects();            
+        res.render("project", {  project: project} );
+      }         
+      
   });
 
+  
+ 
   // app.get('/project', function (req, res) {
   //   res.render('project', { title: 'Hey', message: 'Hello there!' })
   // })
@@ -73,12 +85,20 @@ mongoose
   
 // });
 
+    function isloggedIn(req, res, next) {
+     
+      if (req.user) {
+        return  true
+      } else {
+          return false
+      } 
+    }
     
     //user log out to be tested later
     app.route('/logout')
     .get(( req, res ) => {
-       req.logout();
-     res.redirect('/');
+        req.session.destroy();
+        res.send({ redirect: '/'});
   });
 
  
@@ -86,7 +106,7 @@ mongoose
   if (process.env.NODE_ENV === 'production') {
     app.use(express.static('/views'));
     app.get('/', (req, res) => {
-      res.sendFile(path.resolve(__dirname, 'views','login.html'));
+      res.sendFile(path.resolve(__dirname, 'views','index.html'));
     })
   }
 

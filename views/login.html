@@ -9,6 +9,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="/styles/styles.css">
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/moment.min.js"></script>
+    
 </head>
 
 <body>
@@ -21,15 +23,22 @@
        
     </form>
     <script>
+   
+
+
+
         const requestToken = (userData) =>{           
                  axios.post('/api/users/login', userData)
                     .then( response => {
                         // const addedUser = response.data;
-                        const{ token, project } = response.data;
+                        const { token, project , expiresIn } = response.data;
                         console.log("POST: user is added", token);  
+
+                        const expires = moment().add(expiresIn);                        
                         localStorage.setItem('jwtToken', token);
+                        //localStorage.setItem('expiresIn', JSON.stringify(expiresIn.valueOf()));
                         setAuthToken(token);
-                        // getUserProjects(token)
+                        getUserProjects(token)
                         // const decoded = parseJwt(token);
                        
                         // axios.get('api/projects/my-project')
@@ -40,25 +49,7 @@
             
         }
 
-        const getUserProjects = (token) => {
-            // console.log("test:" + localStorage.getItem('jwtToken'));
-            axios.get('api/projects/my-project/',{
-                headers:{
-                    'Authorization': token
-                }
-            })
-            .then(function (response) {
-                   
-                    document.body.innerHTML= response.data;
-                          
-                    
-                   
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });;
-                
-        }
+        
         const form = document.querySelector('form');
 
             const formEvent = form.addEventListener('submit', event => {
@@ -69,7 +60,7 @@
 
             const user = { email, password };
             requestToken(user);
-            getUserProjects(localStorage.getItem('jwtToken'))
+           
         })
 
 
@@ -84,14 +75,30 @@
          
         };
 
+        function getUserProjects(token){
+             
+        axios.get('api/projects/my-project/',{
+            headers:{
+                'Authorization': token
+            }
+        })
+        .then(function (response) {
+               document.write( response.data );       
+            
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+        
+        }
 
-        // const isLoggedIn = () => {
-        //     const token =  localStorage.getItem('jwtToken');
-        //     if( !token ){
-        //         return false;
-        //     }
-        // }
+        const isLoggedIn = () => {
+            return moment().isBefore(this.getExpiration());
+        }
 
+        const isLoggedOut = () => {
+            return !isLoggedIn();
+        }
         // const redirect = () =>{
         //     const isLogged = isLoggedIn();
 
@@ -99,6 +106,12 @@
         //         axio.get('/project');
         //     }
         // }
+
+        const getExpiration = () => {
+            const expiration = localStorage.getItem('expiresIn');
+            const expiresAt = JSON.parse(expiration);
+            return moment(expiresAt)
+        }
         // function parseJwt (token) {
         //     var base64Url = token.split('.')[1];
         //     var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');

@@ -1,7 +1,22 @@
 doctype html
 html
     head
+    script(src='https://unpkg.com/axios/dist/axios.min.js')
     body
         div 
+            input(
+                id="logout"
+                type='submit'
+                name='agreement'
+                value='log out'
+            )
+            
+            script(type='text/javascript').
+                document.getElementById('logout').onclick = () => { 
+                    localStorage.clear()
+                    axios.get('/logout')
+                    .then( res => document.location = ( res.data.redirect ));        
+                              
+                }
             li 
                 a #{project} 
