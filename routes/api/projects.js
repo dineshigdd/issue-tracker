@@ -6,21 +6,29 @@ const validateProjectInput = require('../../validation/project');
 const Project = require('../../models/Project');
 const User = require('../../models/User');
 const checkisAuthenticated = require('../../util/route-auth');
-const userProject = require('../../util/userProjects')
+const userProject = require('../../util/userProjects');
+const { compareSync } = require('bcryptjs');
 const setUserProjects = userProject.setUserProjects;
 const getUserProjects = userProject.getUserProjects;
 
 
 // app.set('view engine', 'pug')
 // app.set("views", path.join(__dirname, "../../views"));
-
+var myprojects = [];
 router.get('/my-project', passport.authenticate('jwt', {session: false}), (req, res) => {
-
+    
         console.log("this is in project "+ req.user.id)
         
-        setUserProjects(req.user.id);      
-        var project = getUserProjects();           
-        res.render("project", {  project: project} )
+            
+         setUserProjects(req.user.id, function(err, project){
+             if(err){
+                 console.log(err)
+             }
+             res.render("project", {  project: project } )          
+             
+         })
+        
+       
   });
 
 router.post("/project",passport.authenticate('jwt', {session: false }),

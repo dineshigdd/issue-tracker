@@ -10,6 +10,10 @@ html
                 name='agreement'
                 value='log out'
             )
+        div#project-list
+        h2#issue-heading
+        div#issues
+        p#add
             
             script(type='text/javascript').
                 document.getElementById('logout').onclick = () => { 
@@ -17,6 +21,54 @@ html
                     axios.get('/logout')
                     .then( res => document.location = ( res.data.redirect ));        
                               
-                }
-            li 
-                a #{project} 
+                }  
+
+            script(type='text/javascript').                            
+                var x = !{JSON.stringify(project)};     
+                let list = '';             
+                x.forEach(element =>{    
+                        list = document.createElement('li');    
+                        list.id = element.project_name;                       
+                        let project_name = document.createTextNode(element.project_name);
+                        list.appendChild(project_name);
+                        document.getElementById('project-list').appendChild( list ); 
+                        showProjectIssues(element.project_name);
+                });
+                        
+                 
+                 function showProjectIssues(project_name){ 
+                    
+                     document.getElementById(project_name).onclick = () =>{                               
+                                axios.get('api/issues/' + project_name).then(res => {
+                                         document.getElementById('issue-heading').innerHTML = "The current issues of "
+                                         + project_name + " project";
+                                          document.getElementById('issues').innerHTML ='';
+                                          
+                                          
+                                          let list = '';
+                                          res.data.forEach(element =>{  
+                                                    list = document.createElement('li');    
+                                                    list.id = element.issue_title;                       
+                                                    let issue_title = document.createTextNode(element.issue_title);
+                                                    list.appendChild(issue_title);
+                                                    document.getElementById('issues').appendChild( list ); 
+                                                    showIssueManagement(list.id)
+                                         });
+
+                                          document.getElementById('add').innerHTML = "<button class='issue-manage'>manage issues</button>";
+                                }                             
+                         ).catch(err => console.log(err))
+                     }
+
+                 }
+
+                 function showIssueManagement(issue){                   
+                        document.getElementById(issue).onclick = () => {
+                              console.log(issue)
+                            axios.get('api/issues/manage/' + issue)
+                                .then(res => console.log( res.data ))
+                                .catch( err => console.log( err ))
+                        }
+                 }
+
+               

@@ -1,24 +1,35 @@
 const Project = require('../models/Project');
 const { compareSync } = require('bcryptjs');
-var myproject='';
+const { deleteOne } = require('../models/Project');
+var myproject;
 module.exports = { 
-    setUserProjects: function setUserProjects( id ){
+    setUserProjects: async function setUserProjects( id , callback){
    
-        Project.findOne({ assigned_to:  id }).then(
-            (project, err) => {
-                if( err ){
+        Project.find({ assigned_to:  id }).then(
+             function ( project,err ) {
+                if( project ){
                     console.log(err)
                 }
-                myproject = (project.project_name) ;
+                
+              
+                // setAllprojects(project)
+                
+                // myproject = project;
+                callback(null,project)
+                // return myproject;
+               // myproject.push(project.project_name) ;
                 
             }
-        ).catch(err => console.log( err ))
+        )    
+        .catch(err => console.log("err"+ err ))
 
   
     },
 
-    getUserProjects : function getUserProjects(){
-       
+    getUserProjects : function getUserProjects() {
+        //  console.log("size:" + myproject);
         return myproject;
     }
 }
+
+

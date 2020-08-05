@@ -12,17 +12,25 @@ const { findOne } = require('../../models/Issue');
 const Project = require('../../models/Project');
 const Issue = require('../../models/Issue');
 
+
+//get issue management page
+router.get('/manage/:issue', ( req, res) => {
+    //console.log( req.params.issue )
+    res.render("issue", {  issues: req.params.issue } )
+});
+
 //get issue of a specified project
 router.get('/:project_name', ( req, res , next ) => {
-
+  
     Project.findOne({ project_name: req.params.project_name })
         .then(
             project => {
-                Issue.findOne( { project: project._id }, ( err , issue ) => {
+                Issue.find( { project: project._id }, ( err , issues ) => {
                     if( err ) {
                         return next( err )
                     }
-                    res.json( issue )   
+                     res.json(issues)
+                    
                 })
             }
         )
