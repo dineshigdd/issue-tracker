@@ -82,8 +82,9 @@
                 'Authorization': token
             }
         })
-        .then(function (response) {
-               document.write( response.data );       
+        .then(function (res) {           
+           
+               document.write( res.data );       
             
             })
             .catch(function (error) {
@@ -92,13 +93,13 @@
         
         }
 
-        const isLoggedIn = () => {
-            return moment().isBefore(this.getExpiration());
-        }
+        // const isLoggedIn = () => {
+        //     return moment().isBefore(this.getExpiration());
+        // }
 
-        const isLoggedOut = () => {
-            return !isLoggedIn();
-        }
+        // const isLoggedOut = () => {
+        //     return !isLoggedIn();
+        // }
         // const redirect = () =>{
         //     const isLogged = isLoggedIn();
 
@@ -107,11 +108,11 @@
         //     }
         // }
 
-        const getExpiration = () => {
-            const expiration = localStorage.getItem('expiresIn');
-            const expiresAt = JSON.parse(expiration);
-            return moment(expiresAt)
-        }
+        // const getExpiration = () => {
+        //     const expiration = localStorage.getItem('expiresIn');
+        //     const expiresAt = JSON.parse(expiration);
+        //     return moment(expiresAt)
+        // }
         // function parseJwt (token) {
         //     var base64Url = token.split('.')[1];
         //     var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');

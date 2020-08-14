@@ -41,6 +41,8 @@ mongoose
     // app.get('/issues/issue/:project', ( req, res) => res.json( req.params));
 
     app.use('/styles', express.static(process.cwd() + '/styles'));
+    app.use('/util', express.static(process.cwd() + '/util'));
+    // app.use(express.static('util'));
     app.use(bodyParser.urlencoded({ extended: false }));
     app.use(bodyParser.json());
     app.use(session({
@@ -59,7 +61,8 @@ mongoose
     app.set("views", path.join(__dirname, "./views"));
     
     app.get('/',function (req, res) {
-      res.sendFile(process.cwd() + '/views/index.html');
+      res.render('index')
+      // res.sendFile(process.cwd() + '/views/index.html');
     });
     //Index page (static HTML)
   app.get('/sign-in',function (req, res) {   

@@ -1,11 +1,119 @@
-doctype html
-html    
-    head
-        title issues tracking system
-    body
-        div 
-            h2="The isssue management"
+script(src='https://unpkg.com/axios/dist/axios.min.js')  
+script(src='../util/curd.js')
+div#issue-form-wrapper
+    h2="The issue management"   
+    div 
+        label Issue Title : 
+        input(type='input' id='issue_title' name='issue_title') 
+        br
+        label Description : 
+        input(type='input' id='issue_text' name='issue_text')
+        br
+        label assigned to: 
+        input(type='input' id='assigned_to' name='assigned_to')
+        br
+        label status : 
+        select(name='status_text' id='status_select')
+            each val in ['active','update','archived']
+                option(value= val) #{val}           
+        br
+        label open:
+        input(type='checkbox' id='open' name='open' checked)
+        br
+        input( type='submit' onclick="sendissue()" id='btn-submit' name='submit')
+        input( type='reset' onclick="clearForm()" id='btn-clear' name='clear')
+       
+    
+    script(type='text/javascript').      
+            let id = !{JSON.stringify(nameData)};             
+            localStorage.setItem('id',id);
+         
+        //- document.getElementById('btn-new-issue').onclick = (event) => {    
+        //-         console.log("sending an issue")                           
+        //-         sendissue();
+        //-         event.preventDefault();
+        //- }
+       
         
-                
+       
+        //-create new issue btn do nothing in the issue pug. This empty function make sure new forms 
+        //-not loading when the user click on the "create new issue" button
+        //- document.getElementById('btn-create-issue').onclick = () => {
+            
+        //- } 
 
-          
+        //- document.getElementById('btn-submit').onclick = () => {
+        //-       let id = !{JSON.stringify(nameData)}; 
+        //-       console.log("issue id:" + id)
+        //-       sendissue(id);
+        //- }   
+
+        
+
+        
+            
+        //- function sendissue(){
+        //-     let action = document.getElementById('issue-form-wrapper').getAttribute("name");
+        //-     console.log(action)
+        //-     console.log("sending an issue") 
+        //-     let issue_title = document.getElementById('issue_title').value;
+        //-     let issue_text = document.getElementById('issue_text').value;
+        //-     let assigned_to = document.getElementById('assigned_to').value;
+        //-     let status_text = document.getElementById('status_select').value;
+        //-     let open = getOpen();
+
+        //-     const Issue = {
+        //-         issue_title,
+        //-         issue_text,
+        //-         assigned_to,
+        //-         status_text,
+        //-         open
+        //-     };
+            
+            
+        //-     console.log("Value of open:" + Issue.open)
+        //-     let id = !{JSON.stringify(nameData)}; 
+        //-     console.log("this is before calling")        
+
+        //-     if( action == 'new-issue'){
+        //-             axios.post('/api/issues/' + id , Issue ,{
+        //-                     headers: {
+        //-                         'Authorization': localStorage.getItem('jwtToken')
+        //-                     }
+        //-                     }
+                            
+        //-                     ).then(
+        //-                 res => {
+        //-                     console.log( res.data )
+        //-                     //- localStorage.setItem('newIssue',res.data.issue_title);
+        //-                     //- list.appendChild(btn);    
+        //-                     const newIssueItem = document.createElement('li');
+        //-                     newIssueItem.id = res.data._id;
+        //-                     const newIssue = document.createTextNode(res.data.issue_title);  
+        //-                     newIssueItem.appendChild(newIssue);
+        //-                     document.getElementById('issues').appendChild(newIssueItem); 
+        //-                     document.getElementById( newIssueItem.id ).addEventListener('click',
+        //-                                                     deleleIssue); 
+        //-                     //- document.write(res.data)
+                            
+        //-                 }
+        //-             ).catch(
+        //-                 err => console.log(err)
+        //-             )
+        //-     }
+        
+        //-     if( action == 'edit-issue'){
+        //-           axios.put('/api/issues/'+ id,Issue, { headers: {
+        //-                         'Authorization': localStorage.getItem('jwtToken')
+        //-                     }
+        //-                     })
+        //-                 .then( 
+        //-                     res =>{
+        //-                         document.getElementById( res.data._id ).innerHTML = res.data.issue_title;
+        //-                     })
+        //-                 .catch( err => console.log( err  ))
+                 
+        //-     }
+        //- }
+                
+       

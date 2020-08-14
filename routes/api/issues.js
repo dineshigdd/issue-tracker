@@ -5,6 +5,7 @@ const jwt = require('jsonwebtoken');
 const keys = require('../../config/keys');
 const passport = require('passport');
 const validateIssueInput = require('../../validation/issue')
+const {ObjectId} = require('mongodb');
 const { session } = require('passport');
 const { param } = require('./users');
 const project = require('../../validation/project');
@@ -13,32 +14,52 @@ const Project = require('../../models/Project');
 const Issue = require('../../models/Issue');
 
 
-//get issue management page
-router.get('/manage/:issue', ( req, res) => {
-    //console.log( req.params.issue )
-    res.render("issue", {  issues: req.params.issue } )
+//to create new issue for the selected project
+router.get('/manage/:project_id', ( req, res) => {
+   res.render("issue", {  nameData: req.params.project_id} )
+//    res.render("issue", {  nameData: req.params.data } )
 });
+
+//to update existing issue for the selected project
+router.get('/manage/:data', ( req, res) => {
+    res.render("issue", {  nameData: req.params.data } )
+ //    res.render("issue", {  nameData: req.params.data } )
+ });
 
 //get issue of a specified project
-router.get('/:project_name', ( req, res , next ) => {
-  
-    Project.findOne({ project_name: req.params.project_name })
-        .then(
-            project => {
-                Issue.find( { project: project._id }, ( err , issues ) => {
-                    if( err ) {
-                        return next( err )
-                    }
-                     res.json(issues)
+router.get('/:id', ( req, res , next ) => {
+    
+    Issue.find( { project: ObjectId(req.params.id) }, ( err , issues ) => {
+        if( err ) {
+            return next( err )
+        }
+         res.json(issues)
+        
+    })
+    // Project.findById({ _id: req.params.id })
+    //     .then(
+    //         project => {
+    //             Issue.find( { project: project._id }, ( err , issues ) => {
+    //                 if( err ) {
+    //                     return next( err )
+    //                 }
+    //                  res.json(issues)
                     
-                })
-            }
-        )
+    //             })
+    //         }
+    //     )
 });
 
+//testing post
+// router.post('/:project_name',( req,res) => {
+//         console.log(req.params.project_name)
+// })
+// passport.authenticate('jwt', {session: false })
+
 //post issue
-router.post('/:project_name',passport.authenticate('jwt', {session: false }),
-    (req, res) => {
+router.post('/:id', passport.authenticate('jwt', {session: false }),
+    async (req, res) => {
+     
         const { error, isValid } = validateIssueInput( req.body );
 
                
@@ -47,19 +68,19 @@ router.post('/:project_name',passport.authenticate('jwt', {session: false }),
             return res.status(400).json({"error": error })
         }
 
-            
+         
         //find the project         
-        Project.findOne({ project_name: req.params.project_name })
+        Project.findById({ _id: req.params.id })
             .then( project =>  {
               
         //  create an issue
         const newIssue = new Issue({
                 issue_title : req.body.issue_title,
                 issue_text : req.body.issue_text,
-                created_by: req.user.id,
-                assigned_to:'',
-                status_text:'',
-                open:false,
+                created_by: req.user.id,    
+                assigned_to: req.body.assigned_to,
+                status_text:req.body.status_text,
+                open:req.body.open,
                 project:project._id
             });
 
@@ -70,7 +91,8 @@ router.post('/:project_name',passport.authenticate('jwt', {session: false }),
                         return res.json('There was a duplicate key error');
                     }
                 }
-            res.json(newIssue)
+                res.json(newIssue)
+            
             })
 
         })
@@ -79,6 +101,7 @@ router.post('/:project_name',passport.authenticate('jwt', {session: false }),
 
 //delete issue
 router.delete("/:id",async ( req, res , next ) => {
+    
     Issue.findByIdAndRemove( { _id: req.params.id},( err , issue ) => {
 
         if( err ) {
@@ -90,26 +113,25 @@ router.delete("/:id",async ( req, res , next ) => {
 })
 
 //update issue
-router.put("/:id",async ( req, res, next ) => {
-  
+router.put("/:id",  passport.authenticate('jwt', {session: false }),
+async ( req, res, next ) => {
+  console.log("update route"+ req.params.id)
     Issue.findByIdAndUpdate( { _id: req.params.id })
         .then(issue =>  {
-            
+            console.log(issue)
             const { 
                 issue_title,
                 issue_text , 
-                // created_by,
+                assigned_to,
                 status_text,
-                open
-                // project
-            }           = req.body;
-    
+                open                
+            }   = req.body;
+
             issue.issue_title = issue_title;
             issue.issue_text = issue_text;
-            // issue.created_by = created_by;
+            issue.assigned_to = assigned_to;
             issue.status_text = status_text;
-            issue.open = open;
-            // issue.project = project;
+            issue.open = open;            ;
             issue.save( err => {
                 if( err ){
                     return next(err)

@@ -1,74 +1,121 @@
 doctype html
 html
-    head
+    head   
     script(src='https://unpkg.com/axios/dist/axios.min.js')
+    script(src='../util/curd.js')
     body
         div 
             input(
                 id="logout"
-                type='submit'
-                name='agreement'
-                value='log out'
-            )
+                type="submit"                
+                value="log out"    
+                style='width: 100px; height: 25px; color:white; background-color: red;'           
+            )        
         div#project-list
         h2#issue-heading
-        div#issues
-        p#add
+        div#issues  
+        div#issue-btn-wrapper
+        div#project-issue 
             
-            script(type='text/javascript').
+            script(type='text/javascript').                
+                var x = '';
+                var issue = '';
+                var isRefreshed = false;
+
                 document.getElementById('logout').onclick = () => { 
                     localStorage.clear()
                     axios.get('/logout')
                     .then( res => document.location = ( res.data.redirect ));        
                               
-                }  
+                }     
+                  
+            
+                    //- localStorage.setItem("x", JSON.stringify(x));
+                    //- location.reload();
+                    //- x =  JSON.parse( localStorage.getItem('x') || [] );  
+                    //- window.addEventListener('beforeunload', (event) => {
 
-            script(type='text/javascript').                            
-                var x = !{JSON.stringify(project)};     
-                let list = '';             
-                x.forEach(element =>{    
-                        list = document.createElement('li');    
-                        list.id = element.project_name;                       
-                        let project_name = document.createTextNode(element.project_name);
-                        list.appendChild(project_name);
-                        document.getElementById('project-list').appendChild( list ); 
-                        showProjectIssues(element.project_name);
-                });
+                         
+                    //-     // Cancel the event as stated by the standard.
+                    //-     event.preventDefault();
+                    //-     // Chrome requires returnValue to be set.
+                    //-     event.returnValue = '';
+                    //-     isRefreshed = true;
+                    //-     console.log("about to unload")
+
+                    //-     setx();
                         
-                 
-                 function showProjectIssues(project_name){ 
+                    //-     }); 
+
+                            
+                    //-    var setx = document.onunload = () =>{
+                           
+                    //-          x =  JSON.parse( localStorage.getItem('x') || [] );  
+                    //-           console.log(x)
+                    //-     }
+               
+                
+
+                    x =  !{JSON.stringify(project)};           
+                    let list = '';    
+                    let arrIssue = [];
                     
-                     document.getElementById(project_name).onclick = () =>{                               
-                                axios.get('api/issues/' + project_name).then(res => {
+                                x.forEach(element =>{    
+                                list = document.createElement('li');    
+                                list.id = element.project_name;                       
+                                let project_name = document.createTextNode(element.project_name);
+                                list.appendChild(project_name);
+                                document.getElementById('project-list').appendChild( list ); 
+                                showProjectIssues(element);
+                        });
+              
+                 
+                 function showProjectIssues(data){                     
+                     document.getElementById(data.project_name).onclick = () =>{   
+                                                    
+                                axios.get('api/issues/' + data._id).then(res => {
                                          document.getElementById('issue-heading').innerHTML = "The current issues of "
-                                         + project_name + " project";
+                                         + data.project_name + " project";
                                           document.getElementById('issues').innerHTML ='';
                                           
                                           
                                           let list = '';
-                                          res.data.forEach(element =>{  
+                                          res.data.forEach(element =>{ 
+                                                    arrIssue.push(element); 
                                                     list = document.createElement('li');    
-                                                    list.id = element.issue_title;                       
+                                                    list.id = element._id;                                                                                                                 
                                                     let issue_title = document.createTextNode(element.issue_title);
                                                     list.appendChild(issue_title);
                                                     document.getElementById('issues').appendChild( list ); 
-                                                    showIssueManagement(list.id)
+
+                                                    document.getElementById(element._id).addEventListener('click',
+                                                    deleleIssue); 
+                                                    document.getElementById(element._id).addEventListener('click',
+                                                    () => updateIssue(element));
+                                                   
+                                                    
+                                                    //- showIssueManagement(list.id,element.issue_title)
                                          });
+                                    
+                                         let addBtn = document.createElement("BUTTON");
+                                         addBtn.id = "btn-create-issue";
+                                         addBtn.innerHTML = "create new issue";                                                                         
+                                         document.getElementById('issue-btn-wrapper').appendChild( addBtn );                                         
+                                         document.getElementById(addBtn.id).addEventListener('click', addIssue(data,addBtn.id));
+                                        
+                                         let editBtn = document.createElement("BUTTON");
+                                         editBtn.id = 'btn-edit-issue';
+                                         editBtn.innerHTML = "Edit issue";                                                                         
+                                         document.getElementById('issue-btn-wrapper').appendChild( editBtn);                     
 
-                                          document.getElementById('add').innerHTML = "<button class='issue-manage'>manage issues</button>";
-                                }                             
-                         ).catch(err => console.log(err))
-                     }
 
-                 }
-
-                 function showIssueManagement(issue){                   
-                        document.getElementById(issue).onclick = () => {
-                              console.log(issue)
-                            axios.get('api/issues/manage/' + issue)
-                                .then(res => console.log( res.data ))
-                                .catch( err => console.log( err ))
-                        }
-                 }
-
-               
+                                         let deleteBtn = document.createElement("BUTTON");
+                                         deleteBtn.id = 'btn-delete-issue';
+                                         deleteBtn.innerHTML = "delete issue";                                                                         
+                                         document.getElementById('issue-btn-wrapper').appendChild( deleteBtn );
+                                         
+                                         
+                                    }                             
+                                ).catch(err => console.log(err))
+                            }
+                     }  
