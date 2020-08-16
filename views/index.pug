@@ -4,10 +4,11 @@ Doctype
             script( src="https://unpkg.com/axios/dist/axios.min.js")
         body
             h1='Welcome to issue tracker'
-            button( onclick='gotoSignIn()')='Sign in'
-            script. 
-                const gotoSignIn = () =>{
-                       axios.get('/sign-in').then( 
-                             res => document.location = res.request.responseURL
-                        )
-                }
+            form(method='GET' action='/sign-in')
+              button( onclick='gotoSignIn()')='Sign in'
+            //- script. 
+            //-     const gotoSignIn = () =>{
+            //-            axios.get('/sign-in').then( 
+            //-                  res => document.location = res.request.responseURL
+            //-             )
+            //-     }

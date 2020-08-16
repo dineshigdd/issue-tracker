@@ -10,6 +10,7 @@ const projects = require('./routes/api/projects');
 const path = require("path");
 const { getUserProjects , setUserProjects } = require('./util/userProjects')
 
+
 const passport = require('passport');
 const { doesNotMatch } = require('assert');
 const { compareSync } = require('bcryptjs');
@@ -52,11 +53,12 @@ mongoose
       user:''
     }))
    
+    // Path routing
     app.use("/api/users", users);
     app.use("/api/projects", projects);
     app.use("/api/issues", issues);
 
-
+    // View engine
     app.set('view engine', 'pug')
     app.set("views", path.join(__dirname, "./views"));
     
@@ -64,6 +66,8 @@ mongoose
       res.render('index')
       // res.sendFile(process.cwd() + '/views/index.html');
     });
+
+
     //Index page (static HTML)
   app.get('/sign-in',function (req, res) {   
       if ( req.session.user == undefined)

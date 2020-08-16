@@ -10,8 +10,9 @@ const userProject = require('../../util/userProjects');
 const { compareSync } = require('bcryptjs');
 const setUserProjects = userProject.setUserProjects;
 const getUserProjects = userProject.getUserProjects;
+var projectController = require('../../controllers/project-controller');
 
-
+router.get('/', projectController.myprojects);
 // app.set('view engine', 'pug')
 // app.set("views", path.join(__dirname, "../../views"));
 var myprojects = [];
