@@ -1,17 +1,19 @@
 var axios = require('axios')
 
-exports.myprojects = function(req , res){    
-    axios.get('api/projects/my-project/',{
+exports.myprojects = function(req , response){   
+    
+    const token = req.session.token
+    
+     axios.get('http://' + req.headers.host + '/api/projects/my-project',{
         headers:{
-            'Authorization': localStorage.getItem('jwtToken')
+            'Authorization':token
         }
     })
     .then(function (res) {           
 
-           res.render( res.data );       
+        response.render('project',{ project:res.data })       
+      
         
         })
-        .catch(function (error) {
-            console.log(error);
-        });
+        .catch( err => console.log);
   }

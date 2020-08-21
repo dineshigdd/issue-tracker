@@ -142,3 +142,52 @@ function getOpen(){
   return false;
 
 }
+
+function loadIssues(url) {
+  var xhttp = new XMLHttpRequest();
+  // var xmlDoc = this.responseXML;
+  xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+      
+        // console.log(JSON.parse(this.responseText)[0].issue_title)
+        localStorage.setItem('project-issue',this.responseText)
+        setIssueData(this.responseText)
+
+        // arr.forEach( element =>{
+        //      let list = '';
+        //      list = document.createElement('li');    
+        //      list.id = element.id;                                                                                                                 
+        //      let issue_title = document.createTextNode(element.issue_title);
+        //      list.appendChild(issue_title);
+        //      document.getElementById('issues').appendChild( list ); 
+            
+        // })
+        
+      }
+  };
+  xhttp.open("GET", url, true);
+  xhttp.send();
+}
+
+function setIssueData(responseText){
+  document.getElementById('issues').innerHTML ='';
+      var arr = []
+      JSON.parse(responseText).forEach(element => {
+        arr.push({ id: element.id, issue_title: element.issue_title})
+        let list = '';
+        list = document.createElement('li');    
+        list.id = element.id;                                                                                                                 
+        let issue_title = document.createTextNode(element.issue_title);
+        list.appendChild(issue_title);
+        document.getElementById('issues').appendChild( list ); 
+      });
+}
+
+function isRefresh(){
+    try{
+      setIssueData( localStorage.getItem('project-issue'))
+    }catch(err){
+      console.log(err)
+    }
+  
+}

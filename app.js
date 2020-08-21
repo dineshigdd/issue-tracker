@@ -14,6 +14,7 @@ const { getUserProjects , setUserProjects } = require('./util/userProjects')
 const passport = require('passport');
 const { doesNotMatch } = require('assert');
 const { compareSync } = require('bcryptjs');
+const { nextTick } = require('process');
 app.use( passport.initialize());
 require('./config/passport')(passport);
 
@@ -26,20 +27,6 @@ mongoose
     .catch( err => console.log(err));
 
 
-    
-
-
-    //Index page (static HTML)
- 
-    // app.get('/test', async (req, res) => {
-    //     res.json({ message: "pass!" })
-    //   })
-
-    // app.post("/api/issues/:project" , (req,res) => {
-    //     res.send("posted an")
-    // })
-    
-    // app.get('/issues/issue/:project', ( req, res) => res.json( req.params));
 
     app.use('/styles', express.static(process.cwd() + '/styles'));
     app.use('/util', express.static(process.cwd() + '/util'));
@@ -62,23 +49,32 @@ mongoose
     app.set('view engine', 'pug')
     app.set("views", path.join(__dirname, "./views"));
     
+    // app.get('*', function( req, res,next) {
+    //       res.locals.user = req.user || null;
+    //       console.log(res.locals.user)
+    //       next();
+    // })
+
     app.get('/',function (req, res) {
       res.render('index')
       // res.sendFile(process.cwd() + '/views/index.html');
     });
 
 
+    app.get('/sign-in',function (req, res) {  
+      res.render('login')
+    })
     //Index page (static HTML)
-  app.get('/sign-in',function (req, res) {   
-      if ( req.session.user == undefined)
-            res.sendFile(process.cwd() + '/views/login.html'); 
-      else  {
-        setUserProjects(req.session.user);      
-        var project = getUserProjects();            
-        res.render("project", {  project: project} );
-      }         
+  // app.get('/sign-in',function (req, res) {   
+  //     if ( req.session.user == undefined)
+  //           res.sendFile(process.cwd() + '/views/login.html'); 
+  //     else  {
+  //       setUserProjects(req.session.user);      
+  //       var project = getUserProjects();            
+  //       res.render("project", {  project: project} );
+  //     }         
       
-  });
+  // });
 
   
  
@@ -92,15 +88,7 @@ mongoose
   
 // });
 
-    function isloggedIn(req, res, next) {
-     
-      if (req.user) {
-        return  true
-      } else {
-          return false
-      } 
-    }
-    
+   
     //user log out to be tested later
     app.route('/logout')
     .get(( req, res ) => {

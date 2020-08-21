@@ -2,6 +2,8 @@ const express = require('express');
 // const app = express();
 const router = express.Router();
 const passport = require('passport');
+const axios = require('axios')
+const url = require('url');
 const validateProjectInput = require('../../validation/project');
 const Project = require('../../models/Project');
 const User = require('../../models/User');
@@ -13,19 +15,18 @@ const getUserProjects = userProject.getUserProjects;
 var projectController = require('../../controllers/project-controller');
 
 router.get('/', projectController.myprojects);
-// app.set('view engine', 'pug')
-// app.set("views", path.join(__dirname, "../../views"));
-var myprojects = [];
-router.get('/my-project', passport.authenticate('jwt', {session: false}), (req, res) => {
-    
-        console.log("this is in project "+ req.user.id)
-        
+
+
+router.get('/my-project', passport.authenticate('jwt', {session: false }), (req, res) => {
+        console.log("I am in project")
+       // console.log("this is in project "+ req.user.id)
+        // res.render('test')
             
          setUserProjects(req.user.id, function(err, project){
              if(err){
                  console.log(err)
              }
-             res.render("project", {  project: project } )          
+             res.send( project  )          
              
          })
         

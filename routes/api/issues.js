@@ -5,14 +5,16 @@ const jwt = require('jsonwebtoken');
 const keys = require('../../config/keys');
 const passport = require('passport');
 const validateIssueInput = require('../../validation/issue')
-const {ObjectId} = require('mongodb');
+
 const { session } = require('passport');
 const { param } = require('./users');
 const project = require('../../validation/project');
 const { findOne } = require('../../models/Issue');
 const Project = require('../../models/Project');
 const Issue = require('../../models/Issue');
+const IssueController = require('../../controllers/issue-controller');
 
+// router.get('/', IssueController.projectIssues );
 
 //to create new issue for the selected project
 router.get('/manage/:project_id', ( req, res) => {
@@ -27,15 +29,16 @@ router.get('/manage/:data', ( req, res) => {
  });
 
 //get issue of a specified project
-router.get('/:id', ( req, res , next ) => {
+router.get('/:id', IssueController.projectIssues )
+// router.get('/:id', ( req, res , next ) => {
     
-    Issue.find( { project: ObjectId(req.params.id) }, ( err , issues ) => {
-        if( err ) {
-            return next( err )
-        }
-         res.json(issues)
+//     Issue.find( { project: ObjectId(req.params.id) }, ( err , issues ) => {
+//         if( err ) {
+//             return next( err )
+//         }
+//          res.json(issues)
         
-    })
+//     })
     // Project.findById({ _id: req.params.id })
     //     .then(
     //         project => {
@@ -48,7 +51,7 @@ router.get('/:id', ( req, res , next ) => {
     //             })
     //         }
     //     )
-});
+// });
 
 //testing post
 // router.post('/:project_name',( req,res) => {

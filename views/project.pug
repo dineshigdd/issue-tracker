@@ -1,121 +1,131 @@
-doctype html
-html
-    head   
-    script(src='https://unpkg.com/axios/dist/axios.min.js')   
-    script(src='../util/curd.js')   
-    body
-        div 
-            input(
-                id="logout"
-                type="submit"                
-                value="log out"    
-                style='width: 100px; height: 25px; color:white; background-color: red;'           
-            )        
-        div#project-list
-        h2#issue-heading
-        div#issues  
-        div#issue-btn-wrapper
-        div#project-issue 
-            
-            script(type='text/javascript').                    
-                var x = '';
-                var issue = '';
-                var isRefreshed = false;
+extends layout
+block content      
+    script(src='/util/curd.js')  
+    body(onload="isRefresh()")     
+    div 
+        input(
+            id="logout"
+            type="submit"                
+            value="log out"    
+            style='width: 100px; height: 25px; color:white; background-color: red;'           
+        )        
+    div#project-list
+    h2#issue-heading
+    div#issues  
+    div#issue-btn-wrapper
+    div#project-issue 
+        
+        script(type='text/javascript').                    
+            var x = '';
+            var issue = '';
+            var isRefreshed = false;
 
-                document.getElementById('logout').onclick = () => { 
-                    localStorage.clear()
-                    axios.get('/logout')
-                    .then( res => document.location = ( res.data.redirect ));        
-                              
-                }     
-                  
-            
-                    //- localStorage.setItem("x", JSON.stringify(x));
-                    //- location.reload();
-                    //- x =  JSON.parse( localStorage.getItem('x') || [] );  
-                    //- window.addEventListener('beforeunload', (event) => {
-
-                         
-                    //-     // Cancel the event as stated by the standard.
-                    //-     event.preventDefault();
-                    //-     // Chrome requires returnValue to be set.
-                    //-     event.returnValue = '';
-                    //-     isRefreshed = true;
-                    //-     console.log("about to unload")
-
-                    //-     setx();
-                        
-                    //-     }); 
-
+            document.getElementById('logout').onclick = () => { 
+                localStorage.clear()
+                axios.get('/logout')
+                .then( res => document.location = ( res.data.redirect ));        
                             
-                    //-    var setx = document.onunload = () =>{
-                           
-                    //-          x =  JSON.parse( localStorage.getItem('x') || [] );  
-                    //-           console.log(x)
-                    //-     }
-               
+            }     
                 
+        
+                //- localStorage.setItem("x", JSON.stringify(x));
+                //- location.reload();
+                //- x =  JSON.parse( localStorage.getItem('x') || [] );  
+                //- window.addEventListener('beforeunload', (event) => {
 
-                    x =  !{JSON.stringify(project)};           
-                    let list = '';    
-                    let arrIssue = [];
+                        
+                //-     // Cancel the event as stated by the standard.
+                //-     event.preventDefault();
+                //-     // Chrome requires returnValue to be set.
+                //-     event.returnValue = '';
+                //-     isRefreshed = true;
+                //-     console.log("about to unload")
+
+                //-     setx();
                     
-                                x.forEach(element =>{    
-                                list = document.createElement('li');    
-                                list.id = element.project_name;                       
-                                let project_name = document.createTextNode(element.project_name);
-                                list.appendChild(project_name);
-                                document.getElementById('project-list').appendChild( list ); 
-                                showProjectIssues(element);
-                        });
-              
-                 
-                 function showProjectIssues(data){                     
-                     document.getElementById(data.project_name).onclick = () =>{   
-                                                    
-                                axios.get('api/issues/' + data._id).then(res => {
-                                         document.getElementById('issue-heading').innerHTML = "The current issues of "
-                                         + data.project_name + " project";
-                                          document.getElementById('issues').innerHTML ='';
-                                          
-                                          
-                                          let list = '';
-                                          res.data.forEach(element =>{ 
-                                                    arrIssue.push(element); 
-                                                    list = document.createElement('li');    
-                                                    list.id = element._id;                                                                                                                 
-                                                    let issue_title = document.createTextNode(element.issue_title);
-                                                    list.appendChild(issue_title);
-                                                    document.getElementById('issues').appendChild( list ); 
+                //-     }); 
 
-                                                    document.getElementById(element._id).addEventListener('click',
-                                                    deleleIssue); 
-                                                    document.getElementById(element._id).addEventListener('click',
-                                                    () => updateIssue(element));
-                                                   
-                                                    
-                                                    //- showIssueManagement(list.id,element.issue_title)
-                                         });
-                                    
-                                         let addBtn = document.createElement("BUTTON");
-                                         addBtn.id = "btn-create-issue";
-                                         addBtn.innerHTML = "create new issue";                                                                         
-                                         document.getElementById('issue-btn-wrapper').appendChild( addBtn );                                         
-                                         document.getElementById(addBtn.id).addEventListener('click', addIssue(data,addBtn.id));
+                        
+                //-    var setx = document.onunload = () =>{
+                        
+                //-          x =  JSON.parse( localStorage.getItem('x') || [] );  
+                //-           console.log(x)
+                //-     }
+            
+            
+
+                x =  !{JSON.stringify(project)};           
+                let list = '';    
+                let arrIssue = [];
+                
+                            x.forEach(element =>{    
+                            list = document.createElement('li');    
+                            list.id = element.project_name;                             
+                            let project_name = document.createTextNode(element.project_name);
+                            list.appendChild(project_name);
+                            document.getElementById('project-list').appendChild( list ); 
+                            showProjectIssues(element);
+                    });
+            
+                
+                function showProjectIssues(data){ 
+                        document.getElementById(data.project_name).onclick = () => {
+                            let getUrl = window.location;
+                            let URL = getUrl.protocol  + '//' + getUrl.host + data._id;  
+                           
+                           
+                            //- window.location.href = (URL + '/api/issues/' + data._id)
+                            loadIssues('/api/issues/' + data._id)
+                        }    
+                    //- document.getElementById(data.project_name).onclick = () =>{   
+                    //-         let getUrl = window.location;
+                    //-         let URL = getUrl.protocol  + '//' + getUrl.host;  
+                             
+                    //-         axios.get( URL + '/api/issues/' + data._id).then(res => {
+                    //-                     document.getElementById('issue-heading').innerHTML = "The current issues of "
+                    //-                     + data.project_name + " project";
+                    //-                     document.getElementById('issues').innerHTML ='';
                                         
-                                         let editBtn = document.createElement("BUTTON");
-                                         editBtn.id = 'btn-edit-issue';
-                                         editBtn.innerHTML = "Edit issue";                                                                         
-                                         document.getElementById('issue-btn-wrapper').appendChild( editBtn);                     
+                                        
+                                        //- let list = '';
+                                        //- res.data.forEach(element =>{ 
+                                        //-         arrIssue.push(element); 
+                                        //-         list = document.createElement('li');    
+                                        //-         list.id = element._id;                                                                                                                 
+                                        //-         let issue_title = document.createTextNode(element.issue_title);
+                                        //-         list.appendChild(issue_title);
+                                        //-         document.getElementById('issues').appendChild( list ); 
+
+                    //-                             document.getElementById(element._id).addEventListener('click',
+                    //-                             deleleIssue); 
+                    //-                             document.getElementById(element._id).addEventListener('click',
+                    //-                             () => updateIssue(element));
+                                                
+                                                
+                    //-                            showIssueManagement(list.id,element.issue_title)
+                    //-                     });
+                                
+                    //-                     let addBtn = document.createElement("BUTTON");
+                    //-                     addBtn.id = "btn-create-issue";
+                    //-                     addBtn.innerHTML = "create new issue";                                                                         
+                    //-                     document.getElementById('issue-btn-wrapper').appendChild( addBtn );                                         
+                    //-                     document.getElementById(addBtn.id).addEventListener('click', addIssue(data,addBtn.id));
+                                    
+                    //-                     let editBtn = document.createElement("BUTTON");
+                    //-                     editBtn.id = 'btn-edit-issue';
+                    //-                     editBtn.innerHTML = "Edit issue";                                                                         
+                    //-                     document.getElementById('issue-btn-wrapper').appendChild( editBtn);                     
 
 
-                                         let deleteBtn = document.createElement("BUTTON");
-                                         deleteBtn.id = 'btn-delete-issue';
-                                         deleteBtn.innerHTML = "delete issue";                                                                         
-                                         document.getElementById('issue-btn-wrapper').appendChild( deleteBtn );
-                                         
-                                         
-                                    }                             
-                                ).catch(err => console.log(err))
-                            }
-                     }  
+                    //-                     let deleteBtn = document.createElement("BUTTON");
+                    //-                     deleteBtn.id = 'btn-delete-issue';
+                    //-                     deleteBtn.innerHTML = "delete issue";                                                                         
+                    //-                     document.getElementById('issue-btn-wrapper').appendChild( deleteBtn );
+                                        
+                                        
+                    //-             }                             
+                    //-         ).catch(err => console.log(err))
+                    //-     }
+                    }  
+
+               

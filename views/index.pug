@@ -1,14 +1,4 @@
-Doctype
-    html
-        head
-            script( src="https://unpkg.com/axios/dist/axios.min.js")
-        body
-            h1='Welcome to issue tracker'
-            form(method='GET' action='/sign-in')
-              button( onclick='gotoSignIn()')='Sign in'
-            //- script. 
-            //-     const gotoSignIn = () =>{
-            //-            axios.get('/sign-in').then( 
-            //-                  res => document.location = res.request.responseURL
-            //-             )
-            //-     }
+extends layout
+block content
+  h1='Welcome to issue tracker'
+  a( href='/sign-in' )='Sign in'

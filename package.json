@@ -8,6 +8,7 @@
     "server": "nodemon start.js",
     "test": "jest --watchAll"
   },
+  "proxy": "http://localhost:5000",
   "author": "dinesh",
   "license": "ISC",
   "dependencies": {

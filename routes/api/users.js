@@ -25,8 +25,8 @@ router.post("/login", async ( req, res ) =>{
                                  ( err , token ) => {                                  
                                         req.session.user = user.id;//no need
                                         req.session.token = 'Bearer ' + token;
-                                   
-                                    res.send({ success: true, token: 'Bearer ' + token , redirect: '/api/projects/'});
+                                        
+                                    res.send({ success: true, token: 'Bearer ' + token , redirect: '/api/projects'});
                                     
                                     //res.json({ success: true})
                                     // res.send({ project: '/project' })
@@ -82,7 +82,14 @@ router.get('/current', passport.authenticate('jwt', {session: false}), (req, res
   })
 
  
-
+//   function isloggedIn() {
+//      const jwt_token = inMemoryToken
+//     if (!jwt_token) {
+//       router.push('/login')
+//     } 
+//     return jwt_token
+//   }
+  
 
 
 module.exports = router;
