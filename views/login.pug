@@ -1,0 +1,58 @@
+extends layout
+block content    
+    h1='LOGIN'
+    form(method="post")    
+        label( username)
+        input( id="email" type="email" name="email")
+        br
+        br
+        label(password )
+        input( id="password" type="password" name="password" )
+        br
+        br
+        button( id="submit")='submit'   
+
+        script.
+            const requestToken = (userData) =>{           
+                    axios.post('/api/users/login', userData)
+                        .then( res => {
+                            // const addedUser = response.data;
+                            const { token, project , expiresIn } = res.data;
+                            console.log("POST: user is added", token);                   
+                            //- setAuthToken(token);                           
+                            window.location.replace( res.data.redirect);            
+                            
+                        }).catch(error => console.log(error))
+                
+            }
+
+        
+            const form = document.querySelector('form');
+
+                const formEvent = form.addEventListener('submit', event => {
+                event.preventDefault();
+
+                const email = document.querySelector('#email').value;
+                const password = document.querySelector('#password').value;
+
+                const user = { email, password };
+                requestToken(user);
+            
+            })
+
+
+            const setAuthToken = (token) => {
+            
+                if( token ){
+                    axios.defaults.headers.common['Authorization'] = token;
+                   
+                
+                } else{
+                    delete axios.defaults.headers.common['Authorization'] 
+                }
+            
+            };
+
+        
+
+   
