@@ -1,0 +1,65 @@
+extends layout
+block content    
+    h1='Create an account'
+    form(method="post")    
+        label( for="firstName") First name 
+        input( id="firstName" type="text" name="firsName")
+        br
+        br
+        label( for="firstName") Last name 
+        input( id="lastName" type="text" name="lastName")
+        br
+        br
+        label( username) Email
+        input( id="email" type="email" name="email")
+        br
+        br
+        label(password ) Password 
+        input( id="password" type="password" name="password" )
+        br
+        br
+        button( id="submit")='submit' 
+
+
+        script.
+            const requestToken = (userData) =>{           
+                    axios.post('/api/users/signup', userData)
+                        .then( res => {
+                            // const addedUser = response.data;
+                            const { token, project , expiresIn } = res.data;
+                            console.log("POST: new user is added", token);                   
+                            //- setAuthToken(token);                           
+                            window.location.replace( res.data.redirect);            
+                            
+                        }).catch(error => console.log(error))
+                
+            }
+
+        
+            const form = document.querySelector('form');
+
+                const formEvent = form.addEventListener('submit', event => {
+                event.preventDefault();
+
+                const first_name = document.querySelector('#firstName').value;
+                const last_name = document.querySelector('#lastName').value;
+                const email = document.querySelector('#email').value;
+                const password = document.querySelector('#password').value;
+
+                const user = { first_name, last_name, email, password };
+                requestToken(user);
+            
+            })
+
+
+            const setAuthToken = (token) => {
+            
+                if( token ){
+                    axios.defaults.headers.common['Authorization'] = token;
+                   
+                
+                } else{
+                    delete axios.defaults.headers.common['Authorization'] 
+                }
+            
+            };

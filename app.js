@@ -64,6 +64,10 @@ mongoose
     app.get('/sign-in',function (req, res) {  
       res.render('login')
     })
+
+    app.get('/sign-up',function (req, res) {  
+      res.render('signup')
+    })
     //Index page (static HTML)
   // app.get('/sign-in',function (req, res) {   
   //     if ( req.session.user == undefined)
