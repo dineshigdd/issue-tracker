@@ -24,6 +24,7 @@ mongoose
     app.set('view engine', 'pug')
     app.set("views", path.join(__dirname, "./views"));
 
+ 
 
     //Index page (static HTML)
  
@@ -50,6 +51,12 @@ mongoose
   app.get('/',function (req, res) {
     res.sendFile(process.cwd() + '/public/index.html');
   });
+
+
+  app.get('/signup',function (req, res) {
+    res.sendFile(process.cwd() + '/views/signup.html');
+  });
+
 
   app.get('/project', function (req, res) {
     res.render('project', { title: 'Hey', message: 'Hello there!' })

@@ -17,39 +17,18 @@
         
             <label>username</label><input id="email" type="email" name="username"/>
             <label>password</label><input id="password" type="password" name="password"/>
-            <button type="submit" id="submit" onclick="test('login');">log in</button>
-            <button type="submit" id="signup" onclick="test('signup');">sign up</button>
+            <button type="submit" id="submit">log in</button>
+            <a href="signup">Sign up</a>
        
     </form>
 
     
-    <script>
-        let Action = null;
-
-         const test = (str) =>{
-                Action = ( str );
-         }
-
-    //      const signup = (userData) =>{           
-    //         // console.log( "sign up")
-    //             return axios.post('/api/users/signup', userData)
-    //                .then( response => {
-    //                    // const addedUser = response.data;
-    //                    const{ token, project } = response.data;
-    //                    localStorage.setItem('jwtToken', token);
-    //                    setAuthToken(token);
-    //                    // const decoded = parseJwt(token);
-    //                    console.log(`POST: user is added`, addedUser);  
-    //                   // document.location = addedUser.project;
-                       
-                       
-    //                }).catch(error => console.error(error))
-           
-    //    }
+    <script>         
+    
 
         const submitUser = ( userData ) =>{           
                 // console.log( "log in")
-                 return axios.post(`/api/users/${Action}`, userData)
+                 return axios.post(`/api/users/login`, userData)
                     .then( response => {
                         // const addedUser = response.data;
                         const{ token, project } = response.data;
@@ -80,17 +59,7 @@
         })
 
 
-            
-        //     form.addEventListener('signup', event => {
-        //     event.preventDefault();
-
-            
-        //     const email = document.querySelector('#email').value;
-        //     const password = document.querySelector('#password').value;
-
-        //     const user = { email, password };           
-        //     signup(user);
-        // })
+     
 
 
         const setAuthToken = (token) => {
