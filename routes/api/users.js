@@ -9,6 +9,8 @@ const User = require('../../models/User');
 
 
 // user log in
+
+
 router.post("/login", async ( req, res ) =>{
     
      const { email , password } = req.body;
@@ -21,17 +23,18 @@ router.post("/login", async ( req, res ) =>{
                         if(isMatch) { 
                            
                             const payload = { id: user.id, email: user.email };
-                               jwt.sign( payload, keys.secretOrKey , { expiresIn: 7200 },
+                               jwt.sign( payload, keys.secretOrKey , /*{ expiresIn: 7200 }*/
                                  ( err , token ) => {                                  
                                         req.session.user = user.id;//no need
                                         req.session.token = 'Bearer ' + token;
-                                        
-                                    res.send({ success: true, token: 'Bearer ' + token , redirect: '/api/projects'});
+                                        // const headerToken = 'Bearer ' + token;
                                     
+                                        // res.redirect('/api/projects/dashboard')
+                                        // res.send({ success: true, token: req.session.token });
+                                        res.status(200).redirect("/api/projects").send({ "token": 'Bearer '+ token });
+                                     
                                     //res.json({ success: true})
-                                    // res.send({ project: '/project' })
-                                    //  res.set('x-token', token);
-                                   
+                                    // res.send({ project: '/project' })          
                                     
                                    
                             })
@@ -50,7 +53,7 @@ router.post("/login", async ( req, res ) =>{
     User.findOne( { email: req.body.email })
         .then( user=> {
                 if(user){
-                    return res.status(400).json({ email: "the user already existed"})
+                    return res.status(400).json({ email: "the user already existed"});
                 }else{
                     const user = new User({
                         first_name: req.body.first_name,
@@ -70,6 +73,8 @@ router.post("/login", async ( req, res ) =>{
                                 .catch( err => console.log( err ))
                         })
                     })
+
+                    return res.send({redirect: '/sign-in'});
                 }
         })
  

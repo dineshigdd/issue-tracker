@@ -1,0 +1,115 @@
+extends layout
+block content          
+    body(onload="isRefresh()")     
+    div 
+        input(
+            id="logout"
+            type="submit"                
+            value="log out"    
+            style='width: 100px; height: 25px; color:white; background-color: red;'           
+        )             
+
+    div#project-list
+    h2#issue-heading
+    div#issues  
+    div#issue-btn-wrapper        
+    div#project-issue                       
+        script(type='text/javascript').                    
+            var x = '';
+            var issue = '';
+            var isRefreshed = false;
+
+            document.getElementById('logout').onclick = () => { 
+                localStorage.clear()
+                axios.get('/logout')
+                .then( res => document.location = ( res.data.redirect ));        
+                            
+            }     
+                
+        
+                //- localStorage.setItem("x", JSON.stringify(x));
+                //- location.reload();
+                //- x =  JSON.parse( localStorage.getItem('x') || [] );  
+                //- window.addEventListener('beforeunload', (event) => {
+
+                        
+                //-     // Cancel the event as stated by the standard.
+                //-     event.preventDefault();
+                //-     // Chrome requires returnValue to be set.
+                //-     event.returnValue = '';
+                //-     isRefreshed = true;
+                //-     console.log("about to unload")
+
+                //-     setx();
+                    
+                //-     }); 
+
+                        
+                //-    var setx = document.onunload = () =>{
+                        
+                //-          x =  JSON.parse( localStorage.getItem('x') || [] );  
+                //-           console.log(x)
+                //-     }
+            
+            
+
+                x =  !{JSON.stringify(project)};           
+                let list = '';    
+                let arrIssue = [];
+                            if( x.length !== 0 ){
+                                x.forEach(element =>{    
+                                list = document.createElement('li');    
+                                list.id = element._id;                             
+                                let project_name = document.createTextNode(element.project_name);
+                                list.appendChild(project_name);
+                                document.getElementById('project-list').appendChild( list ); 
+                                showProjectIssues(element);
+                            
+                                });
+                            }
+            
+                
+                function showProjectIssues(data){ 
+                        document.getElementById(data._id).onclick = () => {
+                            let getUrl = window.location;
+                            let URL = getUrl.origin + '/api/issues/' + data._id;  
+                           
+                           
+                            //-  window.location.href = (URL)
+                            AjaxRequest('/api/issues/' + data._id, data._id);
+
+                            
+                             
+                        }    
+
+                        
+                            
+                }  
+
+        
+                const submitProject = (project) =>{      
+                        
+                        axios.post('/api/projects/project',project)
+                            .then( res => {
+                                console.log( res.data)           
+                                
+                            }).catch(error => console.log(error))
+                    
+                }
+
+        
+                const form = document.querySelector('form')
+                const formEvent = form.addEventListener('submit', event => {
+                event.preventDefault();
+                console.log("test");
+                const project_name = document.querySelector('#projectName').value;
+                const project_description = document.querySelector('#projectDesc').value;
+
+                const project = { project_name , project_description };
+                 console.log( project )    
+                submitProject( project );         
+            })
+
+
+               
+                

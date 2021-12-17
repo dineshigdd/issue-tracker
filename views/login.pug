@@ -1,7 +1,7 @@
 extends layout
 block content    
     h1='LOGIN'
-    form(method="post")    
+    form(action="/api/users/login" method="post")    
         label( username)
         input( id="email" type="email" name="email")
         br
@@ -12,46 +12,63 @@ block content
         br
         button( id="submit")='submit'   
 
-        script.
-            const requestToken = (userData) =>{           
-                    axios.post('/api/users/login', userData)
-                        .then( res => {
-                            // const addedUser = response.data;
-                            const { token, project , expiresIn } = res.data;
-                            console.log("POST: user is added", token);                   
-                            //- setAuthToken(token);                           
-                            window.location.replace( res.data.redirect);            
+        //- script.
+        //-     const requestToken = (userData) =>{           
+        //-             axios.post('/api/users/login', userData)
+        //-                 .then( res => {
+        //-                     // const addedUser = response.data;
+        //-                     //- const { token, project , expiresIn } = res.data;
+        //-                     const { success, token } = res.data;   
+                           
+        //-                     //- setAuthToken( token );                           
+        //-                     //- window.location.replace( res.data.redirect);  
+                          
+        //-                     if( success ){
+        //-                         //-  getProjectDashboard(token);  
+        //-                     }
+                        
+                               
                             
-                        }).catch(error => console.log(error))
+        //-                 }).catch(error => console.log(error))
                 
-            }
+        //-     }
 
         
-            const form = document.querySelector('form');
+        //-         const form = document.querySelector('form');
+        //-         const formEvent = form.addEventListener('submit', event => {
+        //-         event.preventDefault();
 
-                const formEvent = form.addEventListener('submit', event => {
-                event.preventDefault();
-
-                const email = document.querySelector('#email').value;
-                const password = document.querySelector('#password').value;
-
-                const user = { email, password };
-                requestToken(user);
+        //-         const email = document.querySelector('#email').value;
+        //-         const password = document.querySelector('#password').value;                
+        //-         const user = { email, password };
+        //-         console.log( user)
+        //-         requestToken(user);
             
-            })
+        //-     })
+
+        //-     const getProjectDashboard = ( token ) => {            
+                    
+        //-             axios.get('api/projects/',{
+        //-                 headers:{
+        //-                     'Authorization':token
+        //-                 }
+        //-             })
+        //-             .then( res => res.render( res.data ))
+        //-             .catch( err => console.log(err));
+        //-     }
 
 
-            const setAuthToken = (token) => {
+            //- const setAuthToken = (token) => {
             
-                if( token ){
-                    axios.defaults.headers.common['Authorization'] = token;
+            //-     if( token ){
+            //-         axios.defaults.headers.common['Authorization'] = token;
                    
                 
-                } else{
-                    delete axios.defaults.headers.common['Authorization'] 
-                }
+            //-     } else{
+            //-         delete axios.defaults.headers.common['Authorization'] 
+            //-     }
             
-            };
+            //- };
 
         
 

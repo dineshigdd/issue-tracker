@@ -68,6 +68,8 @@ mongoose
     app.get('/sign-up',function (req, res) {  
       res.render('signup')
     })
+
+    
     //Index page (static HTML)
   // app.get('/sign-in',function (req, res) {   
   //     if ( req.session.user == undefined)
@@ -94,10 +96,10 @@ mongoose
 
    
     //user log out to be tested later
-    app.route('/logout')
+    app.route('/signout')
     .get(( req, res ) => {
         req.session.destroy();
-        res.send({ redirect: '/'});
+        res. redirect('/');
   });
 
  

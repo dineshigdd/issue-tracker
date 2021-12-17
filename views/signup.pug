@@ -26,9 +26,7 @@ block content
                     axios.post('/api/users/signup', userData)
                         .then( res => {
                             // const addedUser = response.data;
-                            const { token, project , expiresIn } = res.data;
-                            console.log("POST: new user is added", token);                   
-                            //- setAuthToken(token);                           
+                           
                             window.location.replace( res.data.redirect);            
                             
                         }).catch(error => console.log(error))
@@ -52,14 +50,4 @@ block content
             })
 
 
-            const setAuthToken = (token) => {
             
-                if( token ){
-                    axios.defaults.headers.common['Authorization'] = token;
-                   
-                
-                } else{
-                    delete axios.defaults.headers.common['Authorization'] 
-                }
-            
-            };
