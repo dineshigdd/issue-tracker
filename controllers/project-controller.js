@@ -22,21 +22,17 @@ exports.myprojects = function(req , response){
 
 
   exports.getProjectDashboard = function( req, response){
-            axios.get(`http://${req.headers.host}/api/projects/dashboard`,{
+        axios.get(`http://${req.headers.host}/api/projects/dashboard`,{
             headers:{
                 'Authorization': req.session.token 
             }
         })
         .then(function (res) {                      
-                response.render(res.data ,{ "test": "test "});
+                response.render( res.data );
                      
         })
         .catch( err => {
             console.log( err );
             response.redirect('/')
         });
-  }
-
-  exports.test = function( path  ) {
-      console.log( path )
-  }
+  };

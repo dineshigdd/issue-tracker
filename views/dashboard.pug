@@ -1,11 +1,14 @@
-doctype html   
+doctype html
+html
+    head
+    script(src='https://unpkg.com/axios/dist/axios.min.js')   
 body     
     div
         a( href='/signout')="Sign out"          
     div 
         ul
             li  
-                a( href='/api/projects/new-project')='New project'
+                a( href='/api/projects/project')='New project'
             li
                 a( href="#")='Delete project'
             li

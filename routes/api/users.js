@@ -31,7 +31,7 @@ router.post("/login", async ( req, res ) =>{
                                     
                                         // res.redirect('/api/projects/dashboard')
                                         // res.send({ success: true, token: req.session.token });
-                                        res.status(200).redirect("/api/projects").send({ "token": 'Bearer '+ token });
+                                        res.status(200).redirect(301,"/api/projects").send(req.session.token);
                                      
                                     //res.json({ success: true})
                                     // res.send({ project: '/project' })          

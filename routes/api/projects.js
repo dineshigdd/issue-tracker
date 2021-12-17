@@ -28,7 +28,7 @@ var projectController = require('../../controllers/project-controller');
 
 router.get('/dashboard', passport.authenticate('jwt', {session: false }), ( req , res ) => res.send('dashboard'));
 
-router.get('/new-project', ( req , res ) => {  
+router.get('/project', ( req , res ) => {  
    
     if(  req.session.token ){
             res.render('project-form')
@@ -54,37 +54,43 @@ router.get('/my-project', passport.authenticate('jwt', {session: false }), (req,
 
 // router.post("/project",passport.authenticate('jwt', {session: false }),
 router.post("/project", passport.authenticate('jwt', {session: false }),( req, res ) => {
+    console.log( "adding project....")   
     //validate input feilds
-    console.log( "adding project....")
-    console.log( req.body )
-    // const { error , isValid } = validateProjectInput( req.body );
-    // const { project_name, project_description } = req.body;
-  
-    // if( isValid){
-      
-    //     return res.status(400).json({"error": error })
-    // }
+    if( req.session.token ){
+           
+           
+            console.log( req.body )
+            const { error , isValid } = validateProjectInput( req.body );
+            const { project_name, project_description } = req.body;
+        
+            if( isValid){
+            
+                return res.status(400).json({"error": error })
+            }
 
-  
-    // //create project 
-    // const newProject = new Project({
-    //     project_name: project_name,
-    //     project_description: project_description,
-    //     assigned_to: req.user.id
-    // })
+        
+            //create project 
+            const newProject = new Project({
+                project_name: project_name,
+                project_description: project_description,
+                assigned_to: req.user.id
+            })
 
-    // //save to db
-    //  newProject.save(err => {
-    //     if( err ){
-    //         if( err.name === 'MongoError' && err.code === 11000 ){
-    //             return res.json('There wa a duplicate key err')
-    //         }
-    //     }
-    //     res.json(newProject)
-    //     })
-    //         .then( project => res.json( project)
-    //         .catch( err => console.log( err ))
-    // )
+            //save to db
+            newProject.save(err => {
+                if( err ){
+                    if( err.name === 'MongoError' && err.code === 11000 ){
+                        return res.json('There wa a duplicate key err')
+                    }
+                }
+                res.json(newProject)
+                })
+                    .then( project => res.json( project)
+                    .catch( err => console.log( err ))
+            )
+    }else{
+        res.redirect('/')
+    }
 })
 
 
