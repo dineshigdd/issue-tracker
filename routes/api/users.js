@@ -25,13 +25,13 @@ router.post("/login", async ( req, res ) =>{
                             const payload = { id: user.id, email: user.email };
                                jwt.sign( payload, keys.secretOrKey , /*{ expiresIn: 7200 }*/
                                  ( err , token ) => {                                  
-                                        req.session.user = user.id;//no need
+                                      
                                         req.session.token = 'Bearer ' + token;
                                         // const headerToken = 'Bearer ' + token;
                                     
                                         // res.redirect('/api/projects/dashboard')
                                         // res.send({ success: true, token: req.session.token });
-                                        res.status(200).redirect(301,"/api/projects").send(req.session.token);
+                                        res.status(200).redirect(301,"/api/projects/").send(token);
                                      
                                     //res.json({ success: true})
                                     // res.send({ project: '/project' })          

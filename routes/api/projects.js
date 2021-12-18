@@ -52,23 +52,21 @@ router.get('/my-project', passport.authenticate('jwt', {session: false }), (req,
        
   });
 
-// router.post("/project",passport.authenticate('jwt', {session: false }),
-router.post("/project", passport.authenticate('jwt', {session: false }),( req, res ) => {
+router.post("/newproject", projectController.setNewProject );
+
+router.post("/project", passport.authenticate('jwt', {session: true }),( req, res ) => {
     console.log( "adding project....")   
     //validate input feilds
-    if( req.session.token ){
-           
-           
-            console.log( req.body )
+          
             const { error , isValid } = validateProjectInput( req.body );
             const { project_name, project_description } = req.body;
-        
+
             if( isValid){
             
                 return res.status(400).json({"error": error })
             }
 
-        
+           
             //create project 
             const newProject = new Project({
                 project_name: project_name,
@@ -80,17 +78,15 @@ router.post("/project", passport.authenticate('jwt', {session: false }),( req, r
             newProject.save(err => {
                 if( err ){
                     if( err.name === 'MongoError' && err.code === 11000 ){
-                        return res.json('There wa a duplicate key err')
+                        return res.json('There was a duplicate key err')
                     }
                 }
                 res.json(newProject)
                 })
-                    .then( project => res.json( project)
-                    .catch( err => console.log( err ))
+                .then(  res.redirect('/api/projects/dashboard')
+                .catch( err => console.log( err ))
             )
-    }else{
-        res.redirect('/')
-    }
+    
 })
 
 

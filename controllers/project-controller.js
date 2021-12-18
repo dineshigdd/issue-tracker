@@ -21,7 +21,7 @@ exports.myprojects = function(req , response){
     };
 
 
-  exports.getProjectDashboard = function( req, response){
+  exports.getProjectDashboard = function( req, response ){
         axios.get(`http://${req.headers.host}/api/projects/dashboard`,{
             headers:{
                 'Authorization': req.session.token 
@@ -36,3 +36,22 @@ exports.myprojects = function(req , response){
             response.redirect('/')
         });
   };
+
+
+  exports.setNewProject = function( req, response ){
+      console.log( req.session.token )
+    axios.get(`http://${req.headers.host}/api/projects/project`,{
+        headers:{
+            'Authorization': req.session.token 
+        }
+    })
+    .then(function (res) {       
+                     console.log( "successful attemp")
+            // response.render( res.data );
+                 
+    })
+    .catch( err => {
+        console.log( "This is an error" );
+        // response.redirect('/')
+    });
+};

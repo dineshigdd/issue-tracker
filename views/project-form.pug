@@ -1,7 +1,7 @@
 extends dashboard
 block content    
     h1='Add New Project'  
-    form(action="/api/projects/project" method="post")    
+    form(action="/api/projects/newproject" method="post")    
         label( projectName )="Project Name "
         input( id="projectName" type="text" name="project_name")
         br
