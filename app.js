@@ -1,5 +1,7 @@
 const express = require('express');
 const session = require('express-session');
+const cookieParser = require('cookie-parser')
+const cors = require('cors')
 const app = express();
 const db = require('./config/keys').mongoURI;   
 const mongoose = require('mongoose');
@@ -40,6 +42,10 @@ mongoose
       user:''
     }))
    
+    app.use(cookieParser());
+    app.use(cors({
+      origin: 'http://localhost:5000/api/project'
+    }));
     // Path routing
     app.use("/api/users", users);
     app.use("/api/projects", projects);

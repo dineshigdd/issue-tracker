@@ -27,11 +27,16 @@ router.post("/login", async ( req, res ) =>{
                                  ( err , token ) => {                                  
                                       
                                         req.session.token = 'Bearer ' + token;
+                                        res.cookie( "token",req.session.token ,{
+                                            httpOnly: true
+                                        })
+
+                                        // res.setHeader("Set-Cookie", req.session.token  );
                                         // const headerToken = 'Bearer ' + token;
                                     
                                         // res.redirect('/api/projects/dashboard')
                                         // res.send({ success: true, token: req.session.token });
-                                        res.status(200).redirect(301,"/api/projects/").send(token);
+                                        res.status(200).redirect(301,"/api/projects/projectdashboard").send(req.session.token);
                                      
                                     //res.json({ success: true})
                                     // res.send({ project: '/project' })          

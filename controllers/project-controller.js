@@ -4,19 +4,19 @@ const { response } = require('express');
 exports.myprojects = function(req , response){   
         
     
-        //  axios.get('http://' + req.headers.host + '/api/projects/my-project',{
-        //     headers:{
-        //         'Authorization': req.session.token 
-        //     }
-        // })
-        // .then(function (res) {
-        //               if( res.data.length === 0 ){
-        //                    return response.render('dashboard-project');
-        //               }else{
-        //                    return response.render('dashboard-project',{ project:res.data })    
-        //               }   
-        // })
-        // .catch( err => console.log(err));
+         axios.get(`http://${req.headers.host}/api/projects/projects`,{
+            headers:{
+                'Authorization': req.session.token 
+            }
+        })
+        .then(function (res) {
+                      if( res.data.length === 0 ){
+                           return response.send('You have no projects');
+                      }else{
+                           return response.render('project',{ project:res.data })    
+                      }   
+        })
+        .catch( err => console.log(err));
 
     };
 
@@ -28,7 +28,7 @@ exports.myprojects = function(req , response){
             }
         })
         .then(function (res) {                      
-                response.render( res.data );
+                return response.render( res.data );
                      
         })
         .catch( err => {
@@ -39,19 +39,23 @@ exports.myprojects = function(req , response){
 
 
   exports.setNewProject = function( req, response ){
-      console.log( req.session.token )
-    axios.get(`http://${req.headers.host}/api/projects/project`,{
-        headers:{
-            'Authorization': req.session.token 
-        }
-    })
-    .then(function (res) {       
-                     console.log( "successful attemp")
-            // response.render( res.data );
+ 
+      
+    axios.post(`http://${req.headers.host}/api/projects/project`,
+       
+        { data:  req.body },
+    
+        
+        { headers:{'Authorization': req.session.token }}
+        )
+    .then(function (res) {   
+        
+                    //  console.log( "successful attemp")
+             response.send( res.data );
                  
     })
     .catch( err => {
-        console.log( "This is an error" );
+        response.send( err );
         // response.redirect('/')
     });
 };

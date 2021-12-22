@@ -14,7 +14,8 @@ const setUserProjects = userProject.setUserProjects;
 const getUserProjects = userProject.getUserProjects;
 var projectController = require('../../controllers/project-controller');
 
- router.get('/', projectController.getProjectDashboard);
+ 
+ router.get('/projectdashboard', projectController.getProjectDashboard);
 // router.get('/dashboard', passport.authenticate('jwt', {session: false }), ( req , res ) => {
 //     return res.data;
 // });
@@ -22,11 +23,11 @@ var projectController = require('../../controllers/project-controller');
 
 
 
-//  router.get('/dashboard', passport.authenticate('jwt', {session: false }), ( req , res ) => {
-//         return res.data;
-//  });
+ router.get('/dashboard', passport.authenticate('jwt', {session: false }), ( req , res ) => {
+        res.send( 'dashboard' );
+ });
 
-router.get('/dashboard', passport.authenticate('jwt', {session: false }), ( req , res ) => res.send('dashboard'));
+// router.get('/dashboard', passport.authenticate('jwt', {session: false }), ( req , res ) => res.send('dashboard'));
 
 router.get('/project', ( req , res ) => {  
    
@@ -36,7 +37,8 @@ router.get('/project', ( req , res ) => {
 })
 
 //get All projects
-router.get('/my-project', passport.authenticate('jwt', {session: false }), (req, res) => {
+router.get('/getprojects', projectController.myprojects );
+router.get('/projects', passport.authenticate('jwt', {session: false }), (req, res) => {
         console.log("I am in project")
        // console.log("this is in project "+ req.user.id)
         // res.render('test')
@@ -54,12 +56,18 @@ router.get('/my-project', passport.authenticate('jwt', {session: false }), (req,
 
 router.post("/newproject", projectController.setNewProject );
 
-router.post("/project", passport.authenticate('jwt', {session: true }),( req, res ) => {
-    console.log( "adding project....")   
+router.post("/project",  passport.authenticate('jwt', {session: false }), ( req, res ) => {
+    
+           
     //validate input feilds
+
           
-            const { error , isValid } = validateProjectInput( req.body );
-            const { project_name, project_description } = req.body;
+            const { error , isValid } = validateProjectInput( req.body.data );
+            const { project_name, project_description } = req.body.data;
+            
+            console.log( project_name + "\n" +     project_description + "\n" +
+                         req.user.id
+            );
 
             if( isValid){
             
@@ -68,24 +76,22 @@ router.post("/project", passport.authenticate('jwt', {session: true }),( req, re
 
            
             //create project 
-            const newProject = new Project({
+            const project = new Project({
                 project_name: project_name,
                 project_description: project_description,
                 assigned_to: req.user.id
             })
 
             //save to db
-            newProject.save(err => {
-                if( err ){
-                    if( err.name === 'MongoError' && err.code === 11000 ){
-                        return res.json('There was a duplicate key err')
-                    }
-                }
-                res.json(newProject)
-                })
-                .then(  res.redirect('/api/projects/dashboard')
-                .catch( err => console.log( err ))
-            )
+            project.save()
+                   .then( res.send( `The ${project_name} is added` ))
+                   .catch( err => {
+                       if( err.name === 'MongoError' && err.code === 11000 ){
+                                        return res.json('There was a duplicate key err');
+                                    }              
+                        
+                    })
+            
     
 })
 
