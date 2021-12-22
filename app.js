@@ -1,7 +1,6 @@
 const express = require('express');
 const session = require('express-session');
 const cookieParser = require('cookie-parser')
-const cors = require('cors')
 const app = express();
 const db = require('./config/keys').mongoURI;   
 const mongoose = require('mongoose');
@@ -35,17 +34,15 @@ mongoose
     // app.use(express.static('util'));
     app.use(bodyParser.urlencoded({ extended: false }));
     app.use(bodyParser.json());
-    app.use(session({
-      'secret':'343ji43j4n3jn4jk3n',
-       resave: false,
-      saveUninitialized: false,
-      user:''
-    }))
+    // app.use(session({
+    //   'secret':'343ji43j4n3jn4jk3n',
+    //    resave: false,
+    //   saveUninitialized: false,
+    //   user:''
+    // }))
    
     app.use(cookieParser());
-    app.use(cors({
-      origin: 'http://localhost:5000/api/project'
-    }));
+
     // Path routing
     app.use("/api/users", users);
     app.use("/api/projects", projects);
