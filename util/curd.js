@@ -185,6 +185,7 @@ function getOpen(){
 }
 
 function AjaxRequest(url, project_id ) {
+  
   var xhttp = new XMLHttpRequest();
  
   xhttp.onreadystatechange = function() {
@@ -203,7 +204,10 @@ function AjaxRequest(url, project_id ) {
 
 }
 
-function  setIssueData(responseText, project_id ){
+function setIssueData(responseText, project_id ){
+  
+  
+  document.getElementById('issue-heading').innerHTML = `The issues of the project:${  document.getElementById(project_id).innerText }`
   document.getElementById('issues').innerHTML ='';
       // var arr = []
       var data = JSON.parse(responseText);

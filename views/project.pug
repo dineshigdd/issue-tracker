@@ -1,7 +1,9 @@
 extends dashboard
 block content            
     body
-    div#project-list
+    div
+        h3='Your projects'
+        #project-list
     h2#issue-heading
     div#issues  
     div#issue-btn-wrapper        
@@ -64,15 +66,12 @@ block content
                            
                            
                             //-  window.location.href = (URL)
-                            AjaxRequest('/api/issues/' + data._id, data._id);
-
-                            
+                            AjaxRequest('/api/issues/' + data._id, data._id);                            
                              
-                        }    
-
-                        
+                        }                           
                             
                 }  
+                
 
         
                 const submitProject = (project) =>{      
@@ -89,12 +88,12 @@ block content
                 const form = document.querySelector('form')
                 const formEvent = form.addEventListener('submit', event => {
                 event.preventDefault();
-                console.log("test");
+               
                 const project_name = document.querySelector('#projectName').value;
                 const project_description = document.querySelector('#projectDesc').value;
 
                 const project = { project_name , project_description };
-                 console.log( project )    
+                    
                 submitProject( project );         
             })
 
