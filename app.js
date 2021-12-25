@@ -34,12 +34,12 @@ mongoose
     // app.use(express.static('util'));
     app.use(bodyParser.urlencoded({ extended: false }));
     app.use(bodyParser.json());
-    // app.use(session({
-    //   'secret':'343ji43j4n3jn4jk3n',
-    //    resave: false,
-    //   saveUninitialized: false,
-    //   user:''
-    // }))
+    app.use(session({
+      'secret':'343ji43j4n3jn4jk3n',
+       resave: false,
+      saveUninitialized: false,
+      user:''
+    }))
    
     app.use(cookieParser());
 
