@@ -5,8 +5,10 @@
   "main": "app.js",
   "scripts": {
     "start": "node start.js",
-    "server": "nodemon start.js",
+    "server": "nodemon start ",
+    "scss": "node-sass --watch styles -o css",
     "test": "jest --watchAll"
+    
   },
   "proxy": "http://localhost:5000",
   "author": "dinesh",
@@ -21,6 +23,7 @@
     "jsonwebtoken": "^8.5.1",
     "moment": "^2.27.0",
     "mongoose": "^5.9.23",
+    "node-sass": "^7.0.0",
     "passport": "^0.4.1",
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",

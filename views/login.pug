@@ -1,16 +1,17 @@
 extends layout
-block content    
-    h1='LOGIN'
-    form(action="/api/users/login" method="post")    
-        label( username)
-        input( id="email" type="email" name="email")
-        br
-        br
-        label(password )
-        input( id="password" type="password" name="password" )
-        br
-        br
-        button( id="submit")='submit'   
+block content     
+    div#login-form-wrapper
+        h1='LOGIN'
+        form(action="/api/users/login" method="post")    
+            label( username)
+            input( id="email" type="email" name="email")
+            br
+            br
+            label(password )
+            input( id="password" type="password" name="password" )
+            br
+            br
+            button( id="submit")='submit'   
 
         //- script.
         //-     const requestToken = (userData) =>{           

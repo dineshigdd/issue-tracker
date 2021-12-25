@@ -1,0 +1,19 @@
+#login-form-wrapper{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: fit-content;
+    background-color: lightblue;
+    width: fit-content;
+}
+
+form{
+    display: inherit;  
+    flex-direction: column;
+    background-color: blueviolet;
+    width: 300px;
+   
+    
+     
+}
