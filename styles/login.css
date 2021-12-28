@@ -4,18 +4,12 @@
     align-items: center;
     justify-content: center;
     min-height: fit-content;
-    background-color: lightblue;
     width: fit-content;
     border-radius: 0.5em;
     margin: 15em auto;
     min-width: 22em;
-    height: 15em;
+    /* height: 15em; */
 }
 
 
 
-.submit-btn-wrapper{
-    display: flex;
-    justify-content: end;
-    
-}

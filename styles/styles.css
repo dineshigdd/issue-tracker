@@ -9,6 +9,9 @@ body {
 
 form{    
     width: fit-content; 
+    margin: 12px;
+    background-color: lightblue;
+    padding: 15px 20px;
 }
 
 label{
@@ -28,6 +31,12 @@ button{
     border-radius: 5px;
     border: none;
     font-size: 16px;
+}
+
+.submit-btn-wrapper{
+    display: flex;
+    justify-content: end;
+    
 }
 
 @media (max-width: 700px) {
