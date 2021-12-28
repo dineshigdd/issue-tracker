@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node start.js",
     "server": "nodemon start ",
-    "scss": "node-sass --watch styles -o css",
+    "scss": "node-sass --watch ../styles -o css",
     "test": "jest --watchAll"
     
   },
