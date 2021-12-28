@@ -1,0 +1,19 @@
+#issue_title_label{
+    margin-right: 22px;
+}
+
+#status_label, #open_checkbox_label{
+    margin-right: 55px;
+}
+
+#open_checkbox{
+    width: 50px;
+}
+
+input,select{
+    margin: 8px 0;
+}
+
+button{
+    margin: 10px;
+}

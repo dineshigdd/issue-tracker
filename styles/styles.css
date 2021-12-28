@@ -18,12 +18,16 @@ label{
     margin: 0 12px;
 }
 
-input{
+input, select{
     height: 30px;
     width: 15em;
     border-radius: 5px;
     border: none;
-    padding: 0px 5px;
+    padding: 0px 5px;    
+}
+
+select{
+    width: 15.9em;
 }
 
 button{
