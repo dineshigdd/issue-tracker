@@ -1,3 +1,43 @@
+.project-dashboard-wrapper{
+    display: flex;
+}
+
+#project-list {
+    width: 20em;
+    padding: 12px;
+}
+
+#project-list > li {
+    display: flex;
+    list-style: none;
+  }
+
+#project-list > li > input {
+    height: 1.5em;
+    width: 3em;
+    border-radius: 5px;
+    border: none;
+    padding: 0px 5px
+}
+
+#project-list > li > label {
+    margin: 0 -5px;
+}
+
+.project-submenu {
+    text-decoration: none;
+}
+.project-submenu > li {
+    margin: 5px;
+    background-color: lightcoral;
+    list-style: none;
+    border-radius: 20px;
+    padding: 10px 15px;
+    font-weight: 500;
+    text-decoration: none;
+    box-shadow: 10px 2px 8px #e5caca;
+}
+
 .issue-mgmt-wrapper {
     display: flex;
 }

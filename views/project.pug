@@ -4,11 +4,14 @@ block content
     body
     div
         h3='Your projects'
-        li
-           a( href="#")='Delete project'
-        li
-           a( href="#")='Edit project' 
-        #project-list
+        div.project-dashboard-wrapper
+            div#project-list
+            ul.project-submenu
+                li
+                    a( href="#")='Delete project'
+                li
+                    a( href="#")='Edit project' 
+            
     h2#issue-heading       
     div.issue-mgmt-wrapper
         div#issues 
@@ -56,9 +59,21 @@ block content
                                 if( x.length !== 0 ){
                                     x.forEach(element =>{    
                                     list = document.createElement('li');    
-                                    list.id = element._id;                             
-                                    let project_name = document.createTextNode(element.project_name);
-                                    list.appendChild(project_name);
+                                    const radioBtn = document.createElement("INPUT");
+                                    radioBtn.setAttribute("type", "radio");
+                                    radioBtn.setAttribute("value", element.project_name);
+                                    radioBtn.setAttribute("name", "project_name");
+                                     radioBtn.setAttribute("id", element._id );
+                                    const radioBtnLabel = document.createElement("LABEL");
+                                    radioBtnLabel.innerHTML = element.project_name;
+
+                                    list.appendChild(radioBtn);
+                                    list.appendChild(radioBtnLabel);
+
+                                    //- list.id = element._id;                             
+                                    //- let project_name = document.createTextNode(element.project_name);
+                                    //- list.appendChild(project_name);
+                                    
                                     document.getElementById('project-list').appendChild( list ); 
                                     showProjectIssues(element);
                                 
