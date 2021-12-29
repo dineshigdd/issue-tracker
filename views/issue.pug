@@ -1,6 +1,7 @@
 extends layout
 block content
     link(rel="stylesheet" type="text/css" href="../../styles/issue.css")  
+<<<<<<< HEAD
     div#issue-form-wrapper
         h2="The issue management"          
         label#issue_title_label Issue Title 
@@ -10,6 +11,17 @@ block content
         input(type='input' id='issue_text' name='issue_text')
         br
         label assigned to
+=======
+    h2="The issue management"     
+    form#issue-form-wrapper             
+        label#issue_title_label Issue Title 
+        input(type='input' id='issue_title' name='issue_title') 
+        br
+        label Description 
+        input(type='input' id='issue_text' name='issue_text')
+        br
+        label assigned to 
+>>>>>>> c0aedd4f16286f33080b040e8311c12f7d6ad217
         input(type='input' id='assigned_to' name='assigned_to')
         br
         label#status_label status
@@ -18,11 +30,19 @@ block content
                 option(value= val) #{val}           
         br
         label#open_checkbox_label open
+<<<<<<< HEAD
         input(type='checkbox' id='open' name='open' checked)
+=======
+        input(type='checkbox' id='open_checkbox' name='open' checked)
+>>>>>>> c0aedd4f16286f33080b040e8311c12f7d6ad217
         br
         div.submit-btn-wrapper
             button#btn-submit(name='submit' onclick='sendissue()')='submit'
             button#btn-clear(name='clear' onclick='clearForm()')='reset'
+<<<<<<< HEAD
+=======
+        
+>>>>>>> c0aedd4f16286f33080b040e8311c12f7d6ad217
         
         
         script(type='text/javascript').      

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #issue-form-wrapper{
     width: fit-content; 
     margin: 12px;
@@ -5,6 +6,8 @@
     padding: 15px 20px;
 }
 
+=======
+>>>>>>> c0aedd4f16286f33080b040e8311c12f7d6ad217
 #issue_title_label{
     margin-right: 22px;
 }
@@ -13,7 +16,11 @@
     margin-right: 55px;
 }
 
+<<<<<<< HEAD
 #open{
+=======
+#open_checkbox{
+>>>>>>> c0aedd4f16286f33080b040e8311c12f7d6ad217
     width: 50px;
 }
 
