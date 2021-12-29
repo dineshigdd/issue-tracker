@@ -9,18 +9,25 @@ body {
 
 form{    
     width: fit-content; 
+    margin: 12px;
+    background-color: lightblue;
+    padding: 15px 20px;
 }
 
 label{
     margin: 0 12px;
 }
 
-input{
+input, select{
     height: 30px;
     width: 15em;
     border-radius: 5px;
     border: none;
-    padding: 0px 5px;
+    padding: 0px 5px;    
+}
+
+select{
+    width: 15.9em;
 }
 
 button{
@@ -28,6 +35,12 @@ button{
     border-radius: 5px;
     border: none;
     font-size: 16px;
+}
+
+.submit-btn-wrapper{
+    display: flex;
+    justify-content: end;
+    
 }
 
 @media (max-width: 700px) {

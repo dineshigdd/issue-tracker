@@ -1,26 +1,28 @@
 extends layout
 block content
+    link(rel="stylesheet" type="text/css" href="../../styles/issue.css")  
     div#issue-form-wrapper
         h2="The issue management"          
-        label Issue Title : 
+        label#issue_title_label Issue Title 
         input(type='input' id='issue_title' name='issue_title') 
         br
-        label Description : 
+        label Description
         input(type='input' id='issue_text' name='issue_text')
         br
-        label assigned to: 
+        label assigned to
         input(type='input' id='assigned_to' name='assigned_to')
         br
-        label status : 
+        label#status_label status
         select(name='status_text' id='status_select')
             each val in ['active','update','archived']
                 option(value= val) #{val}           
         br
-        label open:
+        label#open_checkbox_label open
         input(type='checkbox' id='open' name='open' checked)
         br
-        button#btn-submit(name='submit' onclick='sendissue()')='submit'
-        button#btn-clear(name='clear' onclick='clearForm()')='reset'
+        div.submit-btn-wrapper
+            button#btn-submit(name='submit' onclick='sendissue()')='submit'
+            button#btn-clear(name='clear' onclick='clearForm()')='reset'
         
         
         script(type='text/javascript').      

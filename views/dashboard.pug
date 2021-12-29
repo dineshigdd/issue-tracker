@@ -3,17 +3,14 @@ html
     head
     script(src='https://unpkg.com/axios/dist/axios.min.js')  
     script(src='../../util/curd.js') 
+    link(rel="stylesheet" type="text/css" href="../../styles/styles.css")
 body     
     div
         a( href='/signout')="Sign out"          
     div 
         ul
             li  
-                a( href='/api/projects/project')='New project'
-            li
-                a( href="#")='Delete project'
-            li
-                a( href="#")='Edit project'  
+                a( href='/api/projects/project')='New project'            
             li
                 a( href="/api/projects/getprojects")='All project'  
 
