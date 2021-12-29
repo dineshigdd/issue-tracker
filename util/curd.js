@@ -239,7 +239,7 @@ function isRefresh(){
             document.getElementById('issue-btn-wrapper').innerHTML =''
             let addBtn = document.createElement("BUTTON");
             addBtn.id = "btn-create-issue";            
-            addBtn.innerHTML = "create new issue";                                                                         
+            addBtn.innerHTML = "Create new issue";                                                                         
             document.getElementById('issue-btn-wrapper').appendChild( addBtn );  
 
         //    window.location.href = window.location.origin + '/api/issues/manage/' + data[0].project;
@@ -255,7 +255,7 @@ function isRefresh(){
 
             let deleteBtn = document.createElement("BUTTON");
             deleteBtn.id = 'btn-delete-issue';
-            deleteBtn.innerHTML = "delete issue";                                                                         
+            deleteBtn.innerHTML = "Delete issue";                                                                         
             document.getElementById('issue-btn-wrapper').appendChild( deleteBtn );
             
            

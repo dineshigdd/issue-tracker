@@ -21,6 +21,6 @@ input,select{
     margin: 8px 0;
 }
 
-button{
+.submit-btn-wrapper > button{
     margin: 10px;
 }
