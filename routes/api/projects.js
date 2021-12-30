@@ -84,7 +84,7 @@ router.post("/project",  passport.authenticate('jwt', {session: false }), ( req,
 
             //save to db
             project.save()
-                   .then( res.send( `The ${project_name} is added` ))
+                   .then( res.json( project ))
                    .catch( err => {
                        if( err.name === 'MongoError' && err.code === 11000 ){
                                         return res.json('There was a duplicate key err');
@@ -95,5 +95,42 @@ router.post("/project",  passport.authenticate('jwt', {session: false }), ( req,
     
 })
 
+
+router.put("/:id",  passport.authenticate('jwt', {session: false }),
+async ( req, res, next ) => {
+  console.log("update route"+ req.body.id)
+    Project.findByIdAndUpdate( { _id: req.body.id })
+        .then(project =>  {
+            console.log(project);
+
+            const { project_name, project_description }   = req.body;
+
+            project.save( err => {
+                if( err ){
+                    return next(err)
+                }
+                
+                return res.json( project );
+            }
+                
+            )
+           
+        });
+    
+})
+
+
+router.delete("/:id",async ( req, res , next ) => {
+    console.log(req.params.id )
+    Project.findByIdAndRemove( { _id: req.params.id},( err , project ) => {
+
+        if( err ) {
+            return next( err)
+        }
+
+        res.json(project)
+    })
+    // res.send("msg from delete route")
+})
 
 module.exports = router;

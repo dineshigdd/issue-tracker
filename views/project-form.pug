@@ -1,8 +1,8 @@
-extends dashboard    
+extends layout    
 block content    
     link(rel="stylesheet" type="text/css" href="../../styles/project-form.css")  
     h1='Add New Project'  
-    form.project_form(action="/api/projects/newproject" method="post")    
+    div#project_form_wrapper
         label#project_name( projectName )="Project Name "
         input( id="projectName" type="text" name="project_name")
         br
@@ -12,4 +12,4 @@ block content
         br
         br
         div.submit-btn-wrapper
-            button#project_submit="submit"  
+            button#project_submit(name='submit' onclick='submitProject()')="submit"

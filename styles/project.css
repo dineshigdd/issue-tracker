@@ -25,9 +25,10 @@
 }
 
 .project-submenu {
-    text-decoration: none;
+    display: flex;
+    flex-direction: column;
 }
-.project-submenu > li {
+.project-submenu > button {
     margin: 5px;
     background-color: lightcoral;
     list-style: none;

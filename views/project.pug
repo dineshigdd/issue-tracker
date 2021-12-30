@@ -7,11 +7,10 @@ block content
         div.project-dashboard-wrapper
             div#project-list
             ul.project-submenu
-                li
-                    a( href="#")='Delete project'
-                li
-                    a( href="#")='Edit project' 
-            
+                button#add_project_btn( onclick="addProject()")='New project'
+                button#delete_project_btn='Delete project'
+                button#edit_project_btn='Edit project' 
+        div#project-mgmt-form-wrapper    
     h2#issue-heading       
     div.issue-mgmt-wrapper
         div#issues 
@@ -63,19 +62,21 @@ block content
                                     radioBtn.setAttribute("type", "radio");
                                     radioBtn.setAttribute("value", element.project_name);
                                     radioBtn.setAttribute("name", "project_name");
-                                     radioBtn.setAttribute("id", element._id );
+                                    radioBtn.setAttribute("id", element._id );
+                                  
                                     const radioBtnLabel = document.createElement("LABEL");
                                     radioBtnLabel.innerHTML = element.project_name;
 
                                     list.appendChild(radioBtn);
                                     list.appendChild(radioBtnLabel);
 
-                                    //- list.id = element._id;                             
+                                    //- list.id = `project_${element._id}`;                             
                                     //- let project_name = document.createTextNode(element.project_name);
                                     //- list.appendChild(project_name);
                                     
                                     document.getElementById('project-list').appendChild( list ); 
                                     showProjectIssues(element);
+                                    
                                 
                                     });
                                 }
@@ -94,30 +95,47 @@ block content
                                 
                     }  
                     
-
-            
-                    const submitProject = (project) =>{      
+                    
+                    if (document.querySelector('input[name="project_name"]')) {
+                            document.querySelectorAll('input[name="project_name"]').forEach((elem) => {
+                                elem.addEventListener("change", function(event) {
+                                let projectId = event.target.id;
+                                console.log(projectId);
+                                
+                                document.getElementById('delete_project_btn').addEventListener('click', ()=>deleteProject(projectId) );
+                                document.getElementById('edit_project_btn').addEventListener('click', ()=>updateProject(projectId) )
                             
-                            axios.post('/api/projects/project',project)
-                                .then( res => {
-                                    console.log( res.data)           
-                                    
-                                }).catch(error => console.log(error))
-                        
+                               
+
+                                });
+                            });
+                            }
+                    
+                    
+                    function addProject(){
+                            axios.get(`/api/projects/project`).then(
+                                        res => {
+                                            //- document.write( res.data)
+                                            document.getElementById( 'project-mgmt-form-wrapper' ).
+                                                    innerHTML = res.data;
+                                        
+                                        }
+                                    )                     
                     }
 
-            
-                    const form = document.querySelector('form')
-                    const formEvent = form.addEventListener('submit', event => {
-                    event.preventDefault();
-                
-                    const project_name = document.querySelector('#projectName').value;
-                    const project_description = document.querySelector('#projectDesc').value;
+                    
 
-                    const project = { project_name , project_description };
-                        
-                    submitProject( project );         
-                })
+                    function updateProject(id){         
+                            
+                             axios.get(`/api/projects/project`).then(
+                                res => {
+                                    document.write( res.data );
+                                });
+
+                    }
+           
+                    
+                     
 
 
                

@@ -1,4 +1,5 @@
 var ID = '';
+ 
 
 function deleleIssue(){   
     console.log("I am in delete")                   
@@ -7,7 +8,7 @@ function deleleIssue(){
        axios.delete('/api/issues/' + this.id).then(
                     res => {
                       document.getElementById('issues').
-                       removeChild(document.getElementById(this.id));; 
+                       removeChild(document.getElementById(this.id));
                          console.log(res.data)
                     }
                ).catch( err => console.log(err))
@@ -239,7 +240,7 @@ function isRefresh(){
             document.getElementById('issue-btn-wrapper').innerHTML =''
             let addBtn = document.createElement("BUTTON");
             addBtn.id = "btn-create-issue";            
-            addBtn.innerHTML = "Create new issue";                                                                         
+            addBtn.innerHTML = "create new issue";                                                                         
             document.getElementById('issue-btn-wrapper').appendChild( addBtn );  
 
         //    window.location.href = window.location.origin + '/api/issues/manage/' + data[0].project;
@@ -255,9 +256,55 @@ function isRefresh(){
 
             let deleteBtn = document.createElement("BUTTON");
             deleteBtn.id = 'btn-delete-issue';
-            deleteBtn.innerHTML = "Delete issue";                                                                         
+            deleteBtn.innerHTML = "delete issue";                                                                         
             document.getElementById('issue-btn-wrapper').appendChild( deleteBtn );
             
            
 }
 
+   
+//Project CRUD operations
+function submitProject() {
+  console.log("submit project")
+  const project_name = document.querySelector('#projectName').value;
+  const project_description = document.querySelector('#projectDesc').value;
+  const project = { project_name , project_description };
+          
+  axios.post(`/api/projects/newproject`,project)
+                      .then( res => {
+                        console.log( res.data)
+                                    const list = document.createElement('li');    
+                                    const radioBtn = document.createElement("INPUT");
+                                    radioBtn.setAttribute("type", "radio");
+                                    radioBtn.setAttribute("value", res.data.project_name);
+                                    radioBtn.setAttribute("name", "project_name");
+                                    radioBtn.setAttribute("id", res.data._id );
+                                    radioBtn.addEventListener("change", function() {
+                                                                     
+                                      document.getElementById('delete_project_btn').addEventListener('click', 
+                                        ()=>deleteProject(res.data._id) );
+                                    })
+
+                                    const radioBtnLabel = document.createElement("LABEL");
+                                    radioBtnLabel.innerHTML = res.data.project_name;
+
+                                    list.appendChild(radioBtn);
+                                    list.appendChild(radioBtnLabel);
+                                  
+                                    document.getElementById('project-list').appendChild( list ); 
+                       
+                      })
+                      .catch(error => console.log(error))        
+}
+
+
+
+function deleteProject(id){
+  axios.delete(`/api/projects/${id}`).then(
+              res => {
+                  console.log( res.data)
+                  document.getElementById(  res.data._id ).parentNode.remove();
+              
+              }
+          )                     
+}
