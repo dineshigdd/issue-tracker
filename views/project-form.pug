@@ -1,7 +1,7 @@
 extends layout    
 block content    
     link(rel="stylesheet" type="text/css" href="../../styles/project-form.css")  
-    h1='Add New Project'  
+    h1= action + " project"
     div#project_form_wrapper
         label#project_name( projectName )="Project Name "
         input( id="projectName" type="text" name="project_name")
@@ -12,4 +12,5 @@ block content
         br
         br
         div.submit-btn-wrapper
-            button#project_submit(name='submit' onclick='submitProject()')="submit"
+            button#project_submit(name='submit' onclick=`submitProject(${ JSON.stringify(action) })`)="submit"
+    

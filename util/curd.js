@@ -264,39 +264,65 @@ function isRefresh(){
 
    
 //Project CRUD operations
-function submitProject() {
-  console.log("submit project")
+function getProjectForm(action){
+  axios.get(`/api/projects/project`, { params: { action: action } }).then(
+              res => {
+                  //- document.write( res.data)
+                  document.getElementById( 'project-mgmt-form-wrapper').
+                          innerHTML = res.data;
+              
+              }
+          )                     
+}
+
+function submitProject(action) {
+ 
+
+  console.log("submit project" + action)
   const project_name = document.querySelector('#projectName').value;
   const project_description = document.querySelector('#projectDesc').value;
   const project = { project_name , project_description };
-          
-  axios.post(`/api/projects/newproject`,project)
-                      .then( res => {
-                        console.log( res.data)
-                                    const list = document.createElement('li');    
-                                    const radioBtn = document.createElement("INPUT");
-                                    radioBtn.setAttribute("type", "radio");
-                                    radioBtn.setAttribute("value", res.data.project_name);
-                                    radioBtn.setAttribute("name", "project_name");
-                                    radioBtn.setAttribute("id", res.data._id );
-                                    radioBtn.addEventListener("change", function() {
-                                                                     
-                                      document.getElementById('delete_project_btn').addEventListener('click', 
-                                        ()=>deleteProject(res.data._id) );
-                                    })
 
-                                    const radioBtnLabel = document.createElement("LABEL");
-                                    radioBtnLabel.innerHTML = res.data.project_name;
+  if( action === 'Add new'){
+    axios.post(`/api/projects/newproject`, project)
+                        .then( res => {
+                          console.log( res.data)
+                                      const list = document.createElement('li');    
+                                      const radioBtn = document.createElement("INPUT");
+                                      radioBtn.setAttribute("type", "radio");
+                                      radioBtn.setAttribute("value", res.data.project_name);
+                                      radioBtn.setAttribute("name", "project_name");
+                                      radioBtn.setAttribute("id", res.data._id );
+                                      radioBtn.addEventListener("change", function() {
+                                                                      
+                                        document.getElementById('delete_project_btn').addEventListener('click', 
+                                          ()=>deleteProject(res.data._id) );
+                                      })
 
-                                    list.appendChild(radioBtn);
-                                    list.appendChild(radioBtnLabel);
-                                  
-                                    document.getElementById('project-list').appendChild( list ); 
-                       
-                      })
-                      .catch(error => console.log(error))        
+                                      const radioBtnLabel = document.createElement("LABEL");
+                                      radioBtnLabel.innerHTML = res.data.project_name;
+
+                                      list.appendChild(radioBtn);
+                                      list.appendChild(radioBtnLabel);
+                                    
+                                      document.getElementById('project-list').appendChild( list ); 
+                        
+                        })
+                        .catch(error => console.log(error)) 
+  }else{
+    updateProject(action);
+  }       
 }
 
+
+function updateProject(action){         
+   console.log( action );                         
+  /*axios.get(`/api/projects/project`).then(
+     res => {
+         document.write( res.data );
+     });*/
+
+}
 
 
 function deleteProject(id){

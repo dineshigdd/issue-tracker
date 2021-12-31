@@ -30,9 +30,9 @@ var projectController = require('../../controllers/project-controller');
 // router.get('/dashboard', passport.authenticate('jwt', {session: false }), ( req , res ) => res.send('dashboard'));
 
 router.get('/project', ( req , res ) => {  
-   
+    console.log( req.query.action );
     if(  req.session.token ){
-            res.render('project-form')
+            res.render('project-form', { action :req.query.action })
     }else res.redirect('/');
 })
 

@@ -7,9 +7,9 @@ block content
         div.project-dashboard-wrapper
             div#project-list
             ul.project-submenu
-                button#add_project_btn( onclick="addProject()")='New project'
+                button#add_project_btn( onclick="getProjectForm('Add new')" )='New project'
                 button#delete_project_btn='Delete project'
-                button#edit_project_btn='Edit project' 
+                button#edit_project_btn( onclick="getProjectForm('Edit')" )='Edit project' 
         div#project-mgmt-form-wrapper    
     h2#issue-heading       
     div.issue-mgmt-wrapper
@@ -111,28 +111,11 @@ block content
                             });
                             }
                     
-                    
-                    function addProject(){
-                            axios.get(`/api/projects/project`).then(
-                                        res => {
-                                            //- document.write( res.data)
-                                            document.getElementById( 'project-mgmt-form-wrapper' ).
-                                                    innerHTML = res.data;
-                                        
-                                        }
-                                    )                     
-                    }
+              
 
                     
 
-                    function updateProject(id){         
-                            
-                             axios.get(`/api/projects/project`).then(
-                                res => {
-                                    document.write( res.data );
-                                });
-
-                    }
+                   
            
                     
                      
