@@ -11,9 +11,9 @@ exports.myprojects = function(req , response){
         })
         .then(function (res) {
                       if( res.data.length === 0 ){
-                           return response.send('You have no projects');
+                           return response.render('project', { message: "You have no projects"});
                       }else{
-                           return response.render('project',{ project:res.data })    
+                           return response.render('project',{ project:res.data , message: "Your projects" })    
                       }   
         })
         .catch( err => console.log(err));

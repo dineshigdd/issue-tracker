@@ -3,13 +3,13 @@ block content
     link(rel="stylesheet" type="text/css" href="../../styles/project.css")       
     body
     div
-        h3='Your projects'
+        h3#project-dashboard-subheading= message
         div.project-dashboard-wrapper
             div#project-list
             ul.project-submenu
-                button#add_project_btn( onclick="getProjectForm('Add new')" )='New project'
-                button#delete_project_btn='Delete project'
-                button#edit_project_btn( onclick="getProjectForm('Edit')" )='Edit project' 
+                button#add_project_btn( onclick=`getProjectForm('Add new')` )='New project'
+                button#delete_project_btn( disabled='true')='Delete project'
+                button#edit_project_btn( onclick="getProjectForm('Edit')" disabled='true')='Edit project' 
         div#project-mgmt-form-wrapper    
     h2#issue-heading       
     div.issue-mgmt-wrapper
@@ -52,15 +52,16 @@ block content
                 
 
                     x =  !{JSON.stringify(project)};  
-                
+
                     let list = '';    
                     let arrIssue = [];
                                 if( x.length !== 0 ){
+                                    
                                     x.forEach(element =>{    
                                     list = document.createElement('li');    
                                     const radioBtn = document.createElement("INPUT");
                                     radioBtn.setAttribute("type", "radio");
-                                    radioBtn.setAttribute("value", element.project_name);
+                                    radioBtn.setAttribute("value", element);
                                     radioBtn.setAttribute("name", "project_name");
                                     radioBtn.setAttribute("id", element._id );
                                   
@@ -76,7 +77,7 @@ block content
                                     
                                     document.getElementById('project-list').appendChild( list ); 
                                     showProjectIssues(element);
-                                    
+                                   
                                 
                                     });
                                 }
@@ -95,21 +96,34 @@ block content
                                 
                     }  
                     
-                    
-                    if (document.querySelector('input[name="project_name"]')) {
-                            document.querySelectorAll('input[name="project_name"]').forEach((elem) => {
-                                elem.addEventListener("change", function(event) {
-                                let projectId = event.target.id;
-                                console.log(projectId);
-                                
-                                document.getElementById('delete_project_btn').addEventListener('click', ()=>deleteProject(projectId) );
-                                document.getElementById('edit_project_btn').addEventListener('click', ()=>updateProject(projectId) )
-                            
-                               
+                    document.addEventListener("DOMContentLoaded", function(event) { 
+                         radionButtonBehavior();
+                         if( document.getElementById('project-list').hasChildNodes() ){
+                                 document.getElementById('edit_project_btn').disabled = false;
+                                 document.getElementById('delete_project_btn').disabled = false;
 
-                                });
-                            });
+                            }else{
+                                document.getElementById('edit_project_btn').disabled = true;
+                                document.getElementById('delete_project_btn').disabled = true;
                             }
+                    });
+                    //- function radionButtonBehavior(){
+                    //- if (document.querySelector('input[name="project_name"]')) {
+                    //-         document.querySelectorAll('input[name="project_name"]').forEach((elem) => {
+                    //-             elem.addEventListener("change", function(event) {
+
+                    //-             document.getElementById('edit_project_btn').disabled = false;
+                    //-             document.getElementById('delete_project_btn').disabled = false;
+                    //-             let projectId = event.target.id;
+                                                             
+                    //-             document.getElementById('delete_project_btn').addEventListener('click', ()=>deleteProject(projectId) );
+                    //-             document.getElementById('edit_project_btn').addEventListener('click', ()=>updateProject(projectId) )
+                                                   
+
+                    //-             });
+                    //-         });
+                    //-         }
+                    //- }
                     
               
 

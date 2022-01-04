@@ -264,7 +264,17 @@ function isRefresh(){
 
    
 //Project CRUD operations
-function getProjectForm(action){
+function getSelectedProject(){
+  const id = document.querySelector('input[name="project_name"]:checked').id;
+
+  axios.get(`/api/projects/project/${id}`).then( res => {
+    setProjectFeilds( res.data );
+    });
+  
+}
+
+
+function getProjectForm(action){  
   axios.get(`/api/projects/project`, { params: { action: action } }).then(
               res => {
                   //- document.write( res.data)
@@ -272,18 +282,44 @@ function getProjectForm(action){
                           innerHTML = res.data;
               
               }
-          )                     
+          )   
+          
+  if( action === 'Edit' ){
+    getSelectedProject();
+   
+  }
 }
 
+function clearProjectForm() {
+  const project_name = document.querySelector('#projectName').value = '';
+  const project_description = document.querySelector('#projectDesc').value = ''
+}
+
+function setProjectFeilds( data  ) {
+  console.log( data )
+  document.getElementById('projectName').value = data.project_name;
+  document.getElementById('projectDesc').value = data.project_description;
+}
+
+function getProjectFeilds() {
+  project_name = document.getElementById('projectName').value;
+  project_description = document.getElementById('projectDesc').value;
+
+  return { project_name , project_description };
+}
+
+
 function submitProject(action) {
+  console.log("submit project" + action)
+  document.getElementById("project-dashboard-subheading").innerHTML = "Your Projects";
  
 
-  console.log("submit project" + action)
-  const project_name = document.querySelector('#projectName').value;
-  const project_description = document.querySelector('#projectDesc').value;
-  const project = { project_name , project_description };
-
   if( action === 'Add new'){
+
+    const project_name = document.querySelector('#projectName').value;
+    const project_description = document.querySelector('#projectDesc').value;
+    const project = { project_name , project_description };
+
     axios.post(`/api/projects/newproject`, project)
                         .then( res => {
                           console.log( res.data)
@@ -294,10 +330,10 @@ function submitProject(action) {
                                       radioBtn.setAttribute("name", "project_name");
                                       radioBtn.setAttribute("id", res.data._id );
                                       radioBtn.addEventListener("change", function() {
-                                                                      
-                                        document.getElementById('delete_project_btn').addEventListener('click', 
-                                          ()=>deleteProject(res.data._id) );
-                                      })
+                                          document.getElementById('edit_project_btn').disabled = false;
+                                          document.getElementById('delete_project_btn').disabled = false;                              
+                                          document.getElementById('delete_project_btn').addEventListener('click', ()=>deleteProject( res.data._id ));
+                                      });
 
                                       const radioBtnLabel = document.createElement("LABEL");
                                       radioBtnLabel.innerHTML = res.data.project_name;
@@ -306,30 +342,50 @@ function submitProject(action) {
                                       list.appendChild(radioBtnLabel);
                                     
                                       document.getElementById('project-list').appendChild( list ); 
-                        
+                                      clearProjectForm();
                         })
                         .catch(error => console.log(error)) 
   }else{
-    updateProject(action);
+    
   }       
 }
 
 
-function updateProject(action){         
-   console.log( action );                         
-  /*axios.get(`/api/projects/project`).then(
-     res => {
-         document.write( res.data );
-     });*/
+function updateProject(id){         
+  
+
+   console.log( id );
+   //check if the project is selected
+   //if selected                
+  // axios.get(`/api/projects/project`).then(
+  //    res => {
+  //        document.write( res.data );
+  //    });
 
 }
+
+
 
 
 function deleteProject(id){
   axios.delete(`/api/projects/${id}`).then(
               res => {
                   console.log( res.data)
-                  document.getElementById(  res.data._id ).parentNode.remove();
+                  try{
+                   
+                    document.getElementById(  res.data._id ).parentNode.remove();
+                  
+                  }catch( err ){
+                    
+                    console.log( "There are no more projects")
+                    console.log(  document.getElementById("project-list").childElementCount );
+                    if( document.getElementById("project-list").childElementCount){
+                        document.getElementById("project-dashboard-subheading").innerHTML = "You have no projects"
+                        document.getElementById('edit_project_btn').disabled = true;
+                        document.getElementById('delete_project_btn').disabled = true;  
+                      }
+                    
+                  }
               
               }
           )                     

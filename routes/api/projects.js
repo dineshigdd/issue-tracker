@@ -14,7 +14,21 @@ const setUserProjects = userProject.setUserProjects;
 const getUserProjects = userProject.getUserProjects;
 var projectController = require('../../controllers/project-controller');
 
- 
+ router.get('/project/:id', ( req, res )=> {
+  
+    Project.findById( req.params.id, ( err , project ) => {
+        if( err ) {
+            return next( err )
+        }
+
+       
+        res.send(project)
+       
+         
+                           
+    })
+});
+
  router.get('/projectdashboard', projectController.getProjectDashboard);
 // router.get('/dashboard', passport.authenticate('jwt', {session: false }), ( req , res ) => {
 //     return res.data;
