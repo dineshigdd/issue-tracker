@@ -59,3 +59,24 @@ exports.myprojects = function(req , response){
         // response.redirect('/')
     });
 };
+
+exports.upDateProject = function( req, response ){
+ 
+    axios.put(`http://${req.headers.host}/api/projects/${ req.body.id }`,
+       
+        { data:  req.body },
+    
+        
+        { headers:{'Authorization': req.session.token }}
+        )
+    .then(function (res) {   
+        
+                    //  console.log( "successful attemp")
+             response.send( res.data );
+                 
+    })
+    .catch( err => {
+        response.send( err );
+        
+    });
+};

@@ -109,22 +109,24 @@ router.post("/project",  passport.authenticate('jwt', {session: false }), ( req,
     
 })
 
+router.put("/", projectController.upDateProject );
 
 router.put("/:id",  passport.authenticate('jwt', {session: false }),
 async ( req, res, next ) => {
-  console.log("update route"+ req.body.id)
-    Project.findByIdAndUpdate( { _id: req.body.id })
+    const { id , project_name, project_description }   = req.body.data;
+    Project.findByIdAndUpdate( { _id: id })
         .then(project =>  {
             console.log(project);
 
-            const { project_name, project_description }   = req.body;
+            project.project_name =  project_name;
+            project.project_description = project_description;
 
             project.save( err => {
                 if( err ){
                     return next(err)
                 }
                 
-                return res.json( project );
+                return res.send( project );
             }
                 
             )

@@ -302,10 +302,11 @@ function setProjectFeilds( data  ) {
 }
 
 function getProjectFeilds() {
+  const id = document.querySelector('input[name="project_name"]:checked').id;
   project_name = document.getElementById('projectName').value;
   project_description = document.getElementById('projectDesc').value;
 
-  return { project_name , project_description };
+  return { id, project_name , project_description };
 }
 
 
@@ -347,20 +348,23 @@ function submitProject(action) {
                         .catch(error => console.log(error)) 
   }else{
     
+    updateProject()
   }       
 }
 
 
-function updateProject(id){         
+function updateProject(){         
   
-
-   console.log( id );
+   const project = getProjectFeilds();
+   console.log( project.id);
+   
    //check if the project is selected
    //if selected                
-  // axios.get(`/api/projects/project`).then(
-  //    res => {
-  //        document.write( res.data );
-  //    });
+  axios.put(`/api/projects`, project ).then(
+     res => {
+         document.getElementById( project.id ).value = res.data.project_name
+         document.getElementById( project.id ).nextElementSibling.innerHTML = res.data.project_name;
+     });
 
 }
 
