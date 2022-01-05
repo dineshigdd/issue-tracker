@@ -15,3 +15,14 @@ function radionButtonBehavior(){
             });
             }
     }
+
+function setRadioButtons( data , name , value ){
+  const radioBtn = document.createElement("INPUT");
+                  radioBtn.setAttribute("type", "radio");
+                  radioBtn.setAttribute("value", value );
+                  radioBtn.setAttribute("name", name );
+                  radioBtn.setAttribute("id", data._id );
+
+  return radioBtn;
+                  
+}

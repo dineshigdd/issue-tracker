@@ -34,7 +34,7 @@ function addIssue(data,project_id,id){
                           .then(res => {   
                                 // console.log(res.data) 
                               //  document.write(res.data);            
-                                document.getElementById('project-issue').innerHTML = res.data;
+                                document.getElementById('project-issue-form').innerHTML = res.data;
                                 ID = project_id;
                               // above line makes not to trigger action in the issue page on submit btn click 
                           }).
@@ -193,7 +193,7 @@ function AjaxRequest(url, project_id ) {
       if (this.readyState == 4 && this.status == 200) {
       
         // console.log(JSON.parse(this.responseText)[0].issue_title)
-        localStorage.setItem('project-issue',this.responseText)
+        localStorage.setItem('project-issue-form',this.responseText)
         setIssueData(this.responseText, project_id)
                
      
@@ -228,7 +228,7 @@ function setIssueData(responseText, project_id ){
 
 function isRefresh(){
     try{
-      setIssueData( localStorage.getItem('project-issue'))
+      setIssueData( localStorage.getItem('project-issue-form'))
     }catch(err){
       console.log(err)
     }
@@ -240,7 +240,7 @@ function isRefresh(){
             document.getElementById('issue-btn-wrapper').innerHTML =''
             let addBtn = document.createElement("BUTTON");
             addBtn.id = "btn-create-issue";            
-            addBtn.innerHTML = "create new issue";                                                                         
+            addBtn.innerHTML = "New issue";                                                                         
             document.getElementById('issue-btn-wrapper').appendChild( addBtn );  
 
         //    window.location.href = window.location.origin + '/api/issues/manage/' + data[0].project;
@@ -256,7 +256,7 @@ function isRefresh(){
 
             let deleteBtn = document.createElement("BUTTON");
             deleteBtn.id = 'btn-delete-issue';
-            deleteBtn.innerHTML = "delete issue";                                                                         
+            deleteBtn.innerHTML = "Delete issue";                                                                         
             document.getElementById('issue-btn-wrapper').appendChild( deleteBtn );
             
            

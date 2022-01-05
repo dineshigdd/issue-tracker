@@ -2,9 +2,13 @@
     display: flex;
 }
 
-#project-list {
-    width: 20em;
-    padding: 12px;
+#project-list, #issues {     
+        width: 20em;
+        padding: 12px;
+        height: 20vh;
+        overflow-y:auto;
+        /* display:flex;
+        flex-direction: column-reverse;     */
 }
 
 #project-list > li {
@@ -41,16 +45,29 @@
 
 .issue-mgmt-wrapper {
     display: flex;
+   
+}
+.project-issue-mgmt-wrapper {
+    min-width: 25vw;
 }
 
 #issue-btn-wrapper {
     display: flex;
-    flex-direction: column;
     align-items: baseline;
 }
 
-#issues {
-    width: 30em;
-    padding: 12px;
+#issue-btn-wrapper > button {
+    margin: 5px;
+    background-color: lightcoral;
+    list-style: none;
+    border-radius: 20px;
+    padding: 10px 15px;
+    font-weight: 500;
+    text-decoration: none;
+    box-shadow: 10px 2px 8px #e5caca;
+}
+
+#issues{
+    padding-top: 50px;
 }
 
