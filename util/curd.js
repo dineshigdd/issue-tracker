@@ -264,8 +264,13 @@ function isRefresh(){
 
    
 //Project CRUD operations
+
+function getProjectId(){
+  return document.querySelector('input[name="project_name"]:checked').id;
+}
+
 function getSelectedProject(){
-  const id = document.querySelector('input[name="project_name"]:checked').id;
+  const id = getProjectId();
 
   axios.get(`/api/projects/project/${id}`).then( res => {
     setProjectFeilds( res.data );
@@ -333,7 +338,7 @@ function submitProject(action) {
                                       radioBtn.addEventListener("change", function() {
                                           document.getElementById('edit_project_btn').disabled = false;
                                           document.getElementById('delete_project_btn').disabled = false;                              
-                                          document.getElementById('delete_project_btn').addEventListener('click', ()=>deleteProject( res.data._id ));
+                                          //document.getElementById('delete_project_btn').addEventListener('click', ()=>deleteProject( res.data._id ));
                                       });
 
                                       const radioBtnLabel = document.createElement("LABEL");
@@ -371,25 +376,25 @@ function updateProject(){
 
 
 
-function deleteProject(id){
+function deleteProject(){
+  const id = getProjectId();
   axios.delete(`/api/projects/${id}`).then(
               res => {
-                  console.log( res.data)
-                  try{
-                   
-                    document.getElementById(  res.data._id ).parentNode.remove();
+                console.log( document.getElementById("project-list").childNodes );
+                  console.log( document.getElementById("project-list").childElementCount )
+                         
+                    
                   
-                  }catch( err ){
-                    
-                    console.log( "There are no more projects")
-                    console.log(  document.getElementById("project-list").childElementCount );
-                    if( document.getElementById("project-list").childElementCount){
-                        document.getElementById("project-dashboard-subheading").innerHTML = "You have no projects"
+                        document.getElementById(  res.data._id ).parentNode.remove();
                         document.getElementById('edit_project_btn').disabled = true;
-                        document.getElementById('delete_project_btn').disabled = true;  
+                        document.getElementById('delete_project_btn').disabled = true; 
+                      
+                      if( document.getElementById("project-list").childElementCount === 0 ){
+                        document.getElementById("project-dashboard-subheading").innerHTML = "You have no projects"
+                     
                       }
-                    
-                  }
+                  
+   
               
               }
           )                     

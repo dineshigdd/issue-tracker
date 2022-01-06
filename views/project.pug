@@ -8,8 +8,8 @@ block content
             div#project-list
             ul.project-submenu
                 button#add_project_btn( onclick=`getProjectForm('Add new')` )='New project'
-                button#delete_project_btn( disabled='true')='Delete project'
-                button#edit_project_btn( onclick="getProjectForm('Edit')" disabled='true')='Edit project' 
+                button#delete_project_btn( disabled onclick=`deleteProject()`)='Delete project'
+                button#edit_project_btn( onclick="getProjectForm('Edit')" disabled )='Edit project' 
         div#project-mgmt-form-wrapper    
     h2#issue-heading       
     div.issue-mgmt-wrapper  
@@ -97,14 +97,13 @@ block content
                     }  
                     
                     document.addEventListener("DOMContentLoaded", function(event) { 
-                         radionButtonBehavior();
+                         
                          if( document.getElementById('project-list').hasChildNodes() ){
-                                 document.getElementById('edit_project_btn').disabled = false;
-                                 document.getElementById('delete_project_btn').disabled = false;
-
-                            }else{
-                                document.getElementById('edit_project_btn').disabled = true;
-                                document.getElementById('delete_project_btn').disabled = true;
+                                 radionButtonBehavior();
+                                
+                                
+                                        
+                                
                             }
                     });
                     //- function radionButtonBehavior(){

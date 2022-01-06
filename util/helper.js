@@ -5,15 +5,11 @@ function radionButtonBehavior(){
                 console.log( elem.checked);
                 document.getElementById('edit_project_btn').disabled = false;
                 document.getElementById('delete_project_btn').disabled = false;
-                let projectId = event.target.id;
-                                             
-                document.getElementById('delete_project_btn').addEventListener('click', ()=>deleteProject(projectId) );
-              //  document.getElementById('edit_project_btn').addEventListener('click', ()=>getSelectedProject(projectId) )
-                               
+                let projectId = event.target.id;                     
 
                 });
             });
-            }
+        }
     }
 
 function setRadioButtons( data , name , value ){
