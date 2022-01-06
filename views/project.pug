@@ -15,8 +15,8 @@ block content
     div.issue-mgmt-wrapper  
         div.project-issue-mgmt-wrapper     
             div#issue-btn-wrapper        
-            div#project-issue-form       
-        div#issues                 
+            div#issues          
+        div#project-issue-form             
             script(type='text/javascript').                    
                 var x = '';
                 var issue = '';
@@ -83,27 +83,12 @@ block content
                                 }
                 
                     
-                    function showProjectIssues(data){ 
-                            document.getElementById(data._id).onclick = () => {
-                                let getUrl = window.location;
-                                let URL = getUrl.origin + '/api/issues/' + data._id;  
-                            
-                            
-                                //-  window.location.href = (URL)
-                                AjaxRequest('/api/issues/' + data._id, data._id);                            
-                                
-                            }                           
-                                
-                    }  
+                 
                     
                     document.addEventListener("DOMContentLoaded", function(event) { 
                          
                          if( document.getElementById('project-list').hasChildNodes() ){
-                                 radionButtonBehavior();
-                                
-                                
-                                        
-                                
+                                 radionButtonBehavior();                     
                             }
                     });
                     //- function radionButtonBehavior(){

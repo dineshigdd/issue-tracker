@@ -1,5 +1,17 @@
 var ID = '';
  
+function showProjectIssues(data){ 
+  document.getElementById(data._id).onclick = () => {
+      let getUrl = window.location;
+      let URL = getUrl.origin + '/api/issues/' + data._id;  
+  
+  
+      //-  window.location.href = (URL)
+      AjaxRequest('/api/issues/' + data._id, data._id);                            
+      
+  }                           
+      
+} 
 
 function deleleIssue(){   
     console.log("I am in delete")                   
@@ -338,7 +350,7 @@ function submitProject(action) {
                                       radioBtn.addEventListener("change", function() {
                                           document.getElementById('edit_project_btn').disabled = false;
                                           document.getElementById('delete_project_btn').disabled = false;                              
-                                          //document.getElementById('delete_project_btn').addEventListener('click', ()=>deleteProject( res.data._id ));
+                                        
                                       });
 
                                       const radioBtnLabel = document.createElement("LABEL");
@@ -348,6 +360,7 @@ function submitProject(action) {
                                       list.appendChild(radioBtnLabel);
                                     
                                       document.getElementById('project-list').appendChild( list ); 
+                                      showProjectIssues(res.data);
                                       clearProjectForm();
                         })
                         .catch(error => console.log(error)) 
