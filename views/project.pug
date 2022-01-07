@@ -59,12 +59,12 @@ block content
                                     
                                     x.forEach(element =>{    
                                     list = document.createElement('li');    
-                                    const radioBtn = document.createElement("INPUT");
-                                    radioBtn.setAttribute("type", "radio");
-                                    radioBtn.setAttribute("value", element.project_name );
-                                    radioBtn.setAttribute("name", "project_name");
-                                    radioBtn.setAttribute("id", element._id );
-                                  
+                                    //- const radioBtn = document.createElement("INPUT");
+                                    //- radioBtn.setAttribute("type", "radio");
+                                    //- radioBtn.setAttribute("value", element.project_name );
+                                    //- radioBtn.setAttribute("name", "project_name");
+                                    //- radioBtn.setAttribute("id", element._id );
+                                    const radioBtn = setRadioButtons( element , 'project_name' , element.project_name );
                                     const radioBtnLabel = document.createElement("LABEL");
                                     radioBtnLabel.innerHTML = element.project_name;
 

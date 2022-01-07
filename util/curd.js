@@ -1,5 +1,9 @@
 var ID = '';
  
+function getIssueId(){
+  return document.querySelector('input[name="project_issue"]:checked').id;
+}
+
 function showProjectIssues(data){ 
   document.getElementById(data._id).onclick = () => {
       let getUrl = window.location;
@@ -14,34 +18,43 @@ function showProjectIssues(data){
 } 
 
 function deleleIssue(){   
-    console.log("I am in delete")                   
-    document.getElementById('btn-delete-issue').onclick = () => {
-      console.log(this.id)
-       axios.delete('/api/issues/' + this.id).then(
-                    res => {
-                      document.getElementById('issues').
-                       removeChild(document.getElementById(this.id));
-                         console.log(res.data)
-                    }
-               ).catch( err => console.log(err))
-               
-   }
+    console.log("I am in delete")        
+    const id = getIssueId();
+    axios.delete(`/api/issues/${ id }`).then(
+                        res => {
+                          document.getElementById( id ).parentNode.remove();
+                             console.log(res.data)
+                        }
+                   ).catch( err => console.log(err));
+
+  
 }
 
-function  updateIssue(data,issue_id){
-  console.log(data)
-   addIssue(data,issue_id,'btn-edit-issue');  
+function  updateIssue(){
+
+  const project_id = getProjectId();
+  const data = JSON.parse(localStorage.getItem('project-issue-form'));
+  console.log( data);
+  // const issue_id = getIssueId();
+  const issue_id = getIssueId();
+  
+  data.forEach( issue => {
+    if(issue_id === issue._id){
+      addIssue(issue, project_id ,'btn-edit-issue');  
+    } 
+  });
+   
  
 }
 
-function addIssue(data,project_id,id){      
+function addIssue(data, project_id, id){      
                 
-                  document.getElementById(id).onclick = () => {
+                  // document.getElementById(id).onclick = () => {
                     // console.log(data[0].project)   
                     // let getUrl = window.location;
                     // let URL = getUrl.origin +  '/api/issues/manage/'  + data[0].project 
                            
-                     
+                    
                       axios.get('/api/issues/manage/' + project_id)                  
                           .then(res => {   
                                 // console.log(res.data) 
@@ -52,7 +65,7 @@ function addIssue(data,project_id,id){
                           }).
                           then(
                               () => {
-                                if( id == 'btn-edit-issue'){
+                                if( id === 'btn-edit-issue'){
                                     
                                    setUpdateFields(data)
                                 }else{
@@ -63,7 +76,7 @@ function addIssue(data,project_id,id){
                              
                           )
                          .catch( err => console.log( err ))
-                  }
+                  // }
 } 
 
 
@@ -111,12 +124,23 @@ function sendissue(){
         xhttp.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
                   const data = JSON.parse( this.responseText );
-                  console.log(data)
+                  
                   const newIssueItem = document.createElement('li');
-                  newIssueItem.id = data._id;
+
+                  const radioBtn = setRadioButtons( data, "project_issue", data.issue_title );
+                  newIssueItem.appendChild(radioBtn);
+
+                  // newIssueItem.id = data._id;
                   const newIssue = document.createTextNode(data.issue_title);  
                   newIssueItem.appendChild(newIssue);
                   document.getElementById('issues').appendChild(newIssueItem); 
+                  
+                  let oldIssues = JSON.parse(localStorage.getItem('project-issue-form')) || [];
+
+                  oldIssues.push(data);
+
+                  localStorage.setItem('project-issue-form', JSON.stringify(oldIssues));
+                  
                   // document.getElementById( newIssueItem.id ).addEventListener('click', deleleIssue); 
                   
             
@@ -217,35 +241,38 @@ function AjaxRequest(url, project_id ) {
 
 }
 
-function setIssueData(responseText, project_id ){
+function setIssueData(responseText, project_id ){ 
   
-  
-  document.getElementById('issue-heading').innerHTML = `The issues of the project:${  document.getElementById(project_id).innerText }`
+  document.getElementById('issue-heading').innerHTML =
+     `The issues of the project:${  document.getElementById(project_id).innerText }`
   document.getElementById('issues').innerHTML ='';
       // var arr = []
       var data = JSON.parse(responseText);
       data.forEach(element => {
         // arr.push({ id: element._id, issue_title: element.issue_title})
         let list = '';
-        list = document.createElement('li');    
-        list.id = element._id;                                                                                                                 
-        let issue_title = document.createTextNode(element.issue_title);
+        list = document.createElement('li');  
+        const radioBtn = setRadioButtons( element,"project_issue", element.issue_title );
+        list.appendChild(radioBtn);
+
+        // list.id = element._id;                                                                                                                 
+        let issue_title = document.createTextNode( element.issue_title );
         list.appendChild(issue_title);
         document.getElementById('issues').appendChild( list ); 
-        document.getElementById(  list.id ).addEventListener('click',deleleIssue);
-        document.getElementById(list.id).addEventListener('click',() => updateIssue(element,element._id));
+        // document.getElementById(  radioBtn.id ).addEventListener('click',deleleIssue);
+        // document.getElementById(radioBtn.id).addEventListener('click',() => updateIssue(element,element._id));
       });
       issueManagementButtons(data,project_id);
 }
 
-function isRefresh(){
-    try{
-      setIssueData( localStorage.getItem('project-issue-form'))
-    }catch(err){
-      console.log(err)
-    }
+// function isRefresh(){
+//     try{
+//       setIssueData( localStorage.getItem('project-issue-form'))
+//     }catch(err){
+//       console.log(err)
+//     }
   
-}
+// }
 
 
  function issueManagementButtons(data,project_id){
@@ -258,157 +285,19 @@ function isRefresh(){
         //    window.location.href = window.location.origin + '/api/issues/manage/' + data[0].project;
             // document.getElementById('btn-create-issue').
             //   addEventListener('click', AjaxRequest(window.location.origin + '/api/issues/manage/' + data[0].project));
-            document.getElementById('btn-create-issue').addEventListener('click', addIssue(data,project_id,addBtn.id));
+            document.getElementById('btn-create-issue').addEventListener('click',()=> addIssue(data,project_id,addBtn.id));
         
             let editBtn = document.createElement("BUTTON");
             editBtn.id = 'btn-edit-issue';
             editBtn.innerHTML = "Edit issue";                                                                         
             document.getElementById('issue-btn-wrapper').appendChild( editBtn);                     
-
+            editBtn.addEventListener( 'click', ()=>updateIssue() );
 
             let deleteBtn = document.createElement("BUTTON");
             deleteBtn.id = 'btn-delete-issue';
             deleteBtn.innerHTML = "Delete issue";                                                                         
             document.getElementById('issue-btn-wrapper').appendChild( deleteBtn );
+            deleteBtn.addEventListener( 'click', ()=>deleleIssue );
             
            
-}
-
-   
-//Project CRUD operations
-
-function getProjectId(){
-  return document.querySelector('input[name="project_name"]:checked').id;
-}
-
-function getSelectedProject(){
-  const id = getProjectId();
-
-  axios.get(`/api/projects/project/${id}`).then( res => {
-    setProjectFeilds( res.data );
-    });
-  
-}
-
-
-function getProjectForm(action){  
-  axios.get(`/api/projects/project`, { params: { action: action } }).then(
-              res => {
-                  //- document.write( res.data)
-                  document.getElementById( 'project-mgmt-form-wrapper').
-                          innerHTML = res.data;
-              
-              }
-          )   
-          
-  if( action === 'Edit' ){
-    getSelectedProject();
-   
-  }
-}
-
-function clearProjectForm() {
-  const project_name = document.querySelector('#projectName').value = '';
-  const project_description = document.querySelector('#projectDesc').value = ''
-}
-
-function setProjectFeilds( data  ) {
-  console.log( data )
-  document.getElementById('projectName').value = data.project_name;
-  document.getElementById('projectDesc').value = data.project_description;
-}
-
-function getProjectFeilds() {
-  const id = document.querySelector('input[name="project_name"]:checked').id;
-  project_name = document.getElementById('projectName').value;
-  project_description = document.getElementById('projectDesc').value;
-
-  return { id, project_name , project_description };
-}
-
-
-function submitProject(action) {
-  console.log("submit project" + action)
-  document.getElementById("project-dashboard-subheading").innerHTML = "Your Projects";
- 
-
-  if( action === 'Add new'){
-
-    const project_name = document.querySelector('#projectName').value;
-    const project_description = document.querySelector('#projectDesc').value;
-    const project = { project_name , project_description };
-
-    axios.post(`/api/projects/newproject`, project)
-                        .then( res => {
-                          console.log( res.data)
-                                      const list = document.createElement('li');    
-                                      const radioBtn = document.createElement("INPUT");
-                                      radioBtn.setAttribute("type", "radio");
-                                      radioBtn.setAttribute("value", res.data.project_name);
-                                      radioBtn.setAttribute("name", "project_name");
-                                      radioBtn.setAttribute("id", res.data._id );
-                                      radioBtn.addEventListener("change", function() {
-                                          document.getElementById('edit_project_btn').disabled = false;
-                                          document.getElementById('delete_project_btn').disabled = false;                              
-                                        
-                                      });
-
-                                      const radioBtnLabel = document.createElement("LABEL");
-                                      radioBtnLabel.innerHTML = res.data.project_name;
-
-                                      list.appendChild(radioBtn);
-                                      list.appendChild(radioBtnLabel);
-                                    
-                                      document.getElementById('project-list').appendChild( list ); 
-                                      showProjectIssues(res.data);
-                                      clearProjectForm();
-                        })
-                        .catch(error => console.log(error)) 
-  }else{
-    
-    updateProject()
-  }       
-}
-
-
-function updateProject(){         
-  
-   const project = getProjectFeilds();
-   console.log( project.id);
-   
-   //check if the project is selected
-   //if selected                
-  axios.put(`/api/projects`, project ).then(
-     res => {
-         document.getElementById( project.id ).value = res.data.project_name
-         document.getElementById( project.id ).nextElementSibling.innerHTML = res.data.project_name;
-     });
-
-}
-
-
-
-
-function deleteProject(){
-  const id = getProjectId();
-  axios.delete(`/api/projects/${id}`).then(
-              res => {
-                console.log( document.getElementById("project-list").childNodes );
-                  console.log( document.getElementById("project-list").childElementCount )
-                         
-                    
-                  
-                        document.getElementById(  res.data._id ).parentNode.remove();
-                        document.getElementById('edit_project_btn').disabled = true;
-                        document.getElementById('delete_project_btn').disabled = true; 
-                      
-                      if( document.getElementById("project-list").childElementCount === 0 ){
-                        document.getElementById("project-dashboard-subheading").innerHTML = "You have no projects"
-                     
-                      }
-                  
-   
-              
-              }
-          )                     
 }

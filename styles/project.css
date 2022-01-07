@@ -71,3 +71,6 @@
     padding-top: 50px;
 }
 
+#issues > li {
+    list-style: none;
+}
