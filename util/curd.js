@@ -34,7 +34,7 @@ function  updateIssue(){
 
   const project_id = getProjectId();
   const data = JSON.parse(localStorage.getItem('project-issue-form'));
-  console.log( data);
+
   // const issue_id = getIssueId();
   const issue_id = getIssueId();
   
@@ -131,7 +131,9 @@ function sendissue(){
                   newIssueItem.appendChild(radioBtn);
 
                   // newIssueItem.id = data._id;
-                  const newIssue = document.createTextNode(data.issue_title);  
+                  let newIssue = document.createElement('label');
+                  newIssue.textContent =  data.issue_title;
+                  
                   newIssueItem.appendChild(newIssue);
                   document.getElementById('issues').appendChild(newIssueItem); 
                   
@@ -150,58 +152,27 @@ function sendissue(){
         xhttp.setRequestHeader("Content-Type", "application/json");
         xhttp.send(JSON.stringify({ id: id , issue: Issue }));
         
-  //       axios.post('/api/issues/' + id , Issue ,{
-  //                 headers: {
-  //                     'Authorization': localStorage.getItem('jwtToken')
-  //                 }
-  //                 }
-                  
-  //                 ).then(
-  //             res => {
-  //                 console.log( res.data )
-  //                 //- localStorage.setItem('newIssue',res.data.issue_title);
-  //                 //- list.appendChild(btn);    
-  //                 const newIssueItem = document.createElement('li');
-  //                 newIssueItem.id = res.data._id;
-  //                 const newIssue = document.createTextNode(res.data.issue_title);  
-  //                 newIssueItem.appendChild(newIssue);
-  //                 document.getElementById('issues').appendChild(newIssueItem); 
-  //                 document.getElementById( newIssueItem.id ).addEventListener('click',
-  //                                                 deleleIssue); 
-  //                 //- document.write(res.data)
-                  
-  //             }
-  //         ).catch(
-  //             err => console.log(err)
-  //         )
+  
   }
 
   if( action == 'edit-issue'){
    
+   Issue.id = getIssueId();
+
     var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
-                  const data = JSON.parse( this.responseText );                 
-                  document.getElementById( data._id ).innerHTML = data.issue_title;                     
+                  const data = JSON.parse( this.responseText );            
+                  document.getElementById(  Issue.id).nextElementSibling.innerHTML = data.issue_title;           
             
             }
         };
-        Issue.id = id;
-        console.log(Issue)
+      
+        // console.log(Issue)
         xhttp.open("PUT", '/api/issues', true);
         xhttp.setRequestHeader("Content-Type", "application/json");
         xhttp.send(JSON.stringify({issue: Issue }));
         
-        // axios.put('/api/issues/'+ id,Issue, { headers: {
-        //               'Authorization': localStorage.getItem('jwtToken')
-        //           }
-        //           })
-        //       .then( 
-        //           res =>{
-        //               document.getElementById( res.data._id ).innerHTML = res.data.issue_title;
-        //           })
-        //       .catch( err => console.log( err  ))
-       
         }
 }
 
@@ -255,8 +226,10 @@ function setIssueData(responseText, project_id ){
         const radioBtn = setRadioButtons( element,"project_issue", element.issue_title );
         list.appendChild(radioBtn);
 
-        // list.id = element._id;                                                                                                                 
-        let issue_title = document.createTextNode( element.issue_title );
+        // list.id = element._id;         
+        let issue_title = document.createElement('label');
+        issue_title.textContent =  element.issue_title;                                                                                                                       
+       
         list.appendChild(issue_title);
         document.getElementById('issues').appendChild( list ); 
         // document.getElementById(  radioBtn.id ).addEventListener('click',deleleIssue);
@@ -297,7 +270,7 @@ function setIssueData(responseText, project_id ){
             deleteBtn.id = 'btn-delete-issue';
             deleteBtn.innerHTML = "Delete issue";                                                                         
             document.getElementById('issue-btn-wrapper').appendChild( deleteBtn );
-            deleteBtn.addEventListener( 'click', ()=>deleleIssue );
+            deleteBtn.addEventListener( 'click', deleleIssue );
             
            
 }
